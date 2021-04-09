@@ -1,3 +1,8 @@
+--NAMESPACE
+-------------------------------------
+local _, core = ...; -- Namespace
+
+
 --Debug Stuff
 -------------------------------------
 debug = true
@@ -6,13 +11,14 @@ debug = true
 -------------------------------------
 
 local function CreateSubFrame(self, x, y)
-    local f = CreateFrame("Button", "$parent_SUBFRAME"..#self.SubFrames+1, self)
+    local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
     
     local iconDownscale = 19
     f:SetSize(100, 100)
     
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 1)
-    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", iconDownscale, -iconDownscale)
+    --same as set SetAllPoints() this just resises the texture
+    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", iconDownscale, -iconDownscale)  
     f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -iconDownscale, iconDownscale)
     f.Icon:SetTexture("interface/icons/inv_mushroom_11")
     f.Icon:SetVertexColor(1, 1, 1, 1)
@@ -55,7 +61,7 @@ local function CreateSubFrame(self, x, y)
     --On Click
     f:SetScript("OnClick", function(self)
         if debug then print("Clicked: " .. f:GetName()) end
-        
+        print(core.nodeDB:GetName()) -- name of node
     end)
     return f
 end
@@ -69,9 +75,6 @@ UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
 UI.title:SetPoint("TOP", 0, -5)
 UI.title:SetText("Adventure Guide")
-
-UI:RegisterEvent("PLAYER_STOPPED_MOVING")
-UI:SetScript("OnEvent", OnEvent)
 
 for i= 1, 5 do
     tinsert(UI.SubFrames, CreateSubFrame(UI, math.random(-300, 300), math.random(-300, 300)))
@@ -90,7 +93,6 @@ if debug then
     DebugFrame:SetScript("OnClick", function(self)
         UI:Show()
     end)
-    UI:Hide()
 else
     UI:Hide()
 end
