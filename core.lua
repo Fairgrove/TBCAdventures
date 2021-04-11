@@ -1,22 +1,33 @@
---NAMESPACE
--------------------------------------
-local _, core = ...; -- Namespace
-local nodeDB = core.nodeDB.nodeData
-
 --Debug Stuff
 -------------------------------------
 debug = true
 
---Actual Code
+--NAMESPACE
 -------------------------------------
+local _, core = ...; -- Namespace
+local nodeDB = core.nodeDB.nodeData
+local nodeIDs = core.nodeDB.debugNodeIDs
+-- if debug then
+--     local nodeIDs = 
+-- else
+--     local nodeIDs = core.nodeDB.nodeIDs
+-- end
 
+
+--Creating UI Frame
+-------------------------------------
+local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
+UI:SetSize(1000, 800) --x, y
+UI:SetPoint("CENTER", UIParent, "CENTER")
+UI.SubFrames = {}
+
+UI.title = UI:CreateFontString(nil, "OVERLAY")
+UI.title:SetFontObject("GameFontHighlight")
+UI.title:SetPoint("TOP", 0, -5)
+UI.title:SetText("Adventure Guide")
 
 --Tooltip Creation
 -------------------------------------
---these will be functions in the future, give it a sting and it makes it that color
-local completedColor = "|cff90EE90" 
-local whiteColor = "|cffffffff"
-
 local function genItemText(items)
     local str ="Items Needed:\n"
             
@@ -86,6 +97,7 @@ local function createTooltip(tooltipData)
             str = str .. genRepText(objective)
         end
         
+        --NYI
         -- if key == 'bosskill' then
         --     str = str .. "Bosses Killed:\n"
         -- end
@@ -96,40 +108,92 @@ local function createTooltip(tooltipData)
     return str
 end
 
+
+
+local function updateNodes()
+    for i, er in pairs(UI.SubFrames) do
+        --save rank
+            -- import from savedVariables for character name
+        
+        -- updateUnlockedStatus 
+        local counter = 0 -- counter for counting # reqs are completed
+        for j, v in pairs(UI.SubFrames[i].data['preReqs']) do --iterate prereqs for current node
+            if v == -1 then -- prereq = -1 means no prereqs
+                counter = counter + 1
+            else
+                if UI.SubFrames[v].data['completed'] == true then --v = prereqid, if prereqid = completed counter++
+                    counter = counter + 1
+                end
+            end
+        end
+        if counter == #UI.SubFrames[i].data['preReqs'] then 
+            UI.SubFrames[i].data['unlocked'] = true
+        end
+
+        -- updateText
+        UI.SubFrames[i].text:SetText(tostring(UI.SubFrames[i].data['rank']) .. "/" .. tostring(UI.SubFrames[i].data['ranks']))
+
+        -- updateTexture
+        if UI.SubFrames[i].data['unlocked'] then
+            UI.SubFrames[i].DesaturateMask:Hide()
+            UI.SubFrames[i].text:Show()
+            UI.SubFrames[i].Availabe:Show()
+        else 
+            UI.SubFrames[i].DesaturateMask:Show()
+            UI.SubFrames[i].text:Hide()
+            UI.SubFrames[i].Availabe:Hide()
+        end
+    end
+end
+
 local function CreateSubFrame(self, node)
     local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
     
-    local iconDownscale = 19
+    f.data = {
+        ['rank'] = 0,
+        ['ranks'] = node['ranks'][1],
+        ['maxRank'] = node['ranks'][2],
+        ['text'] = "",
+        ['preReqs'] = node['preReqs'],
+        ['unlocked'] = false,
+        ['completed'] = false,
+    }
+
     f:SetSize(100, 100)
 
-    --icon
-    f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
     --same as set SetAllPoints() this just resises the texture
-    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", iconDownscale, -iconDownscale)  
-    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -iconDownscale, iconDownscale)
-    f.Icon:SetTexture(node['textures']['icon'])
+    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", 19, -19)  
+    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -19, 19)
+    f.Icon:SetTexture(node['icon'])
     f.Icon:SetVertexColor(1, 1, 1, 1)
 
-    --glow
-    f.Glow = f:CreateTexture(nil, "ARTWORK", nil, 2)
-    f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", iconDownscale, -iconDownscale)
-    f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -iconDownscale, iconDownscale)
-    f.Glow:SetTexture(node['textures']['glow'])
+    f.Glow = f:CreateTexture(nil, "ARTWORK", nil, 5)
+    f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", 10, -10)
+    f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -10, 10)
+    f.Glow:SetTexture("Interface/Masks/CircleMaskScalable")
     f.Glow:SetVertexColor(0, 0, 0, 0)
 
-    -- ring
-    f.texture = f:CreateTexture(nil, "ARTWORK", nil, 3)
-    f.texture:SetAllPoints()
-    f.texture:SetTexture(node['textures']['ring'])
-    f.texture:SetVertexColor(1, 1, 1, 1)
+    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
+    f.Ring:SetAllPoints()
+    f.Ring:SetTexture("Interface/Artifacts/Artifacts-PerkRing-Final-Mask")
+    f.Ring:SetVertexColor(1, 1, 1, 1)
     
-    --this could be used for ranks???? 
-    --like for getting honored with Keepers of time, each rep rank is a rank on the node
-    --also get a litte square arround the numbers
-    --also get a bit more creative with the design, dont just copy artifact UI :)
-    -- f.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    -- f.text:SetPoint("CENTER")
-    -- f.text:SetText(f:GetName())
+    f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 4)
+    f.DesaturateMask:SetPoint("TOPLEFT", f ,"TOPLEFT", 20, -20)
+    f.DesaturateMask:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -20, 20)
+    f.DesaturateMask:SetTexture("Interface/Masks/CircleMaskScalable")
+    f.DesaturateMask:SetVertexColor(0, 0, 0, 0.5)
+
+    f.Availabe = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Availabe:SetAllPoints()
+    f.Availabe:SetTexture("Interface/Masks/CircleMaskScalable")
+    f.Availabe:SetVertexColor(1, 1, 1, 1)
+
+    f.text = f:CreateFontString(nil, "OVERLAY")
+    f.text:SetFontObject("GameFontHighlight")
+    f.text:SetPoint("BOTTOM", 0, 0)
+    f.text:SetText(f.data['text'])
 
     f:SetPoint("CENTER", node['x'], node['y'])
     
@@ -138,7 +202,7 @@ local function CreateSubFrame(self, node)
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", -25, 25);
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
-        f.Glow:SetVertexColor(0.5, 0.5, 0.5, 1)
+        f.Glow:SetVertexColor(1, 1, 1, 0.2)
     end)
     
     --On Mouseover leave
@@ -150,23 +214,27 @@ local function CreateSubFrame(self, node)
     --On Click
     f:SetScript("OnClick", function(self)
         if debug then print("Clicked: " .. f:GetName()) end
+        
+        --if criteria then -- get criteria
+        if f.data['unlocked'] then
+            if f.data['rank'] < f.data['maxRank'] then
+                f.data['rank'] = f.data['rank'] + 1
+            end
+            if f.data['rank'] >= f.data['ranks'] then
+                f.data['completed'] = true
+            end
+        end
+        updateNodes()
     end)
     return f
 end
 
-local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
-UI:SetSize(1000, 800) --x, y
-UI:SetPoint("CENTER", UIParent, "CENTER")
-UI.SubFrames = {}
-
-UI.title = UI:CreateFontString(nil, "OVERLAY")
-UI.title:SetFontObject("GameFontHighlight")
-UI.title:SetPoint("TOP", 0, -5)
-UI.title:SetText("Adventure Guide")
-
-for i= 1, 1 do
-    tinsert(UI.SubFrames, CreateSubFrame(UI, nodeDB[0]))
+--Creating Nodes
+-------------------------------------
+for i, v in pairs(nodeIDs) do
+    tinsert(UI.SubFrames, CreateSubFrame(UI, nodeDB[v]))
 end
+updateNodes()
 
 -- for debugging
 if debug then
@@ -179,14 +247,30 @@ if debug then
     DebugFrame.Icon:SetTexture("interface/icons/inv_mushroom_11")
     
     DebugFrame:SetScript("OnClick", function(self)
+        updateNodes()
         UI:Show()
     end)
 else
     UI:Hide()
 end
 
+
+
+
+
+-- UI.SubFrames[1]:SetSize(100, 100)
+
 -- this has to be at the end of the code, idk why.
 -- tinsert(UISpecialFrames, UI:GetName())
 -- UI:SetScript("OnEscapePressed", function()
 --     UI:Hide()
 -- end)
+
+
+--this could be used for ranks???? 
+    --like for getting honored with Keepers of time, each rep rank is a rank on the node
+    --also get a litte square arround the numbers
+    --also get a bit more creative with the design, dont just copy artifact UI :)
+    -- f.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    -- f.text:SetPoint("CENTER")
+    -- f.text:SetText(f:GetName())
