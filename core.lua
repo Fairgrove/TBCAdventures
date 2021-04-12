@@ -7,12 +7,6 @@ debug = true
 local _, core = ...; -- Namespace
 local nodeDB = core.nodeDB.nodeData
 local nodeIDs = core.nodeDB.debugNodeIDs
--- if debug then
---     local nodeIDs = 
--- else
---     local nodeIDs = core.nodeDB.nodeIDs
--- end
-
 
 --Creating UI Frame
 -------------------------------------
@@ -25,7 +19,6 @@ UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
 UI.title:SetPoint("TOP", 0, -5)
 UI.title:SetText("Adventure Guide")
-
 --Tooltip Creation
 -------------------------------------
 local function genItemText(items)
@@ -100,15 +93,89 @@ local function createTooltip(tooltipData)
         --NYI
         -- if key == 'bosskill' then
         --     str = str .. "Bosses Killed:\n"
-        -- end
-        
-        
+        -- end  
     end
     
     return str
 end
 
+local function questCriteria(questList)
+    if #questList > 0 then
+        local counter = 0
+        for i, v in pairs(questList) do
+            if C_QuestLog.IsQuestFlaggedCompleted(v) then
+                counter = counter + 1
+            end
+        end
+        if counter == #questList then
+            return 1
+        else
+            return 0
+        end
+    else 
+        return 0
+    end  
+end
 
+local function itemCriteria(itemList)
+    if #itemList > 0 then
+        local counter = 0
+        for i in pairs(itemList) do
+            local itemName = itemList[i][1]
+            local itemCount = GetItemCount(itemList[i][1])
+            local itemReq = itemList[i][2]
+            if itemCount >= itemReq then
+                counter = counter + 1
+            end
+        end
+        if counter == #itemList then
+            return 1
+        else
+            return 0
+        end
+    else 
+        return 0
+    end
+end
+
+local function repCriteria(repList)
+    if #repList > 0 then
+        local counter = 0
+        local neutral = 4 --standingID for neutal
+        for i in pairs(repList) do
+            local name, _, standing= GetFactionInfoByID(repList[i][1])
+            local repReq = repList[i][2]
+            
+            if standing >= 4 then
+                counter = (repReq - neutral) - (repReq - standing)
+            else
+                counter = 0
+            end
+        end
+        return counter
+    else
+        return 0
+    end
+end
+
+local function getRanks(criteria)
+    local ret = 0
+    if #criteria['reputation'] > 0 then
+        for i in pairs(criteria['reputation']) do
+            ret = ret + (criteria['reputation'][i][2] - 4)
+        end
+    end
+    
+    if #criteria['item'] > 0 then
+        ret = ret + 1
+    end
+    
+    if #criteria['quest'] > 0 then
+        ret = ret + 1
+    end
+    
+    return ret
+end
 
 local function updateNodes()
     for i, er in pairs(UI.SubFrames) do
@@ -135,29 +202,42 @@ local function updateNodes()
 
         -- updateTexture
         if UI.SubFrames[i].data['unlocked'] then
+            if UI.SubFrames[i]:availableRanks() > 0 then
+                UI.SubFrames[i].Available:Show()
+            else 
+                UI.SubFrames[i].Available:Hide()
+            end
             UI.SubFrames[i].DesaturateMask:Hide()
             UI.SubFrames[i].text:Show()
-            UI.SubFrames[i].Availabe:Show()
+            
         else 
+            UI.SubFrames[i].Available:Hide()
             UI.SubFrames[i].DesaturateMask:Show()
             UI.SubFrames[i].text:Hide()
-            UI.SubFrames[i].Availabe:Hide()
         end
     end
 end
 
 local function CreateSubFrame(self, node)
     local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
-    
+--return (repCriteria(criteria['reputation']) + itemCriteria(criteria['item']) + questCriteria(criteria['quest'])) - rank
     f.data = {
         ['rank'] = 0,
-        ['ranks'] = node['ranks'][1],
-        ['maxRank'] = node['ranks'][2],
+        ['ranks'] = getRanks(node['tooltip']['objectives']),
+        --['availableRanks'] = 0,
         ['text'] = "",
         ['preReqs'] = node['preReqs'],
         ['unlocked'] = false,
         ['completed'] = false,
     }
+
+    f.availableRanks = function (self)
+        local a = repCriteria(node['tooltip']['objectives']['reputation'])
+        local b = itemCriteria(node['tooltip']['objectives']['item'])
+        local c = questCriteria(node['tooltip']['objectives']['quest'])
+        
+        return a + b + c - f.data['rank']
+    end,
 
     f:SetSize(100, 100)
 
@@ -185,10 +265,10 @@ local function CreateSubFrame(self, node)
     f.DesaturateMask:SetTexture("Interface/Masks/CircleMaskScalable")
     f.DesaturateMask:SetVertexColor(0, 0, 0, 0.5)
 
-    f.Availabe = f:CreateTexture(nil, "ARTWORK", nil, 1)
-    f.Availabe:SetAllPoints()
-    f.Availabe:SetTexture("Interface/Masks/CircleMaskScalable")
-    f.Availabe:SetVertexColor(1, 1, 1, 1)
+    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Available:SetAllPoints()
+    f.Available:SetTexture("Interface/Masks/CircleMaskScalable")
+    f.Available:SetVertexColor(1, 1, 1, 1)
 
     f.text = f:CreateFontString(nil, "OVERLAY")
     f.text:SetFontObject("GameFontHighlight")
@@ -215,13 +295,17 @@ local function CreateSubFrame(self, node)
     f:SetScript("OnClick", function(self)
         if debug then print("Clicked: " .. f:GetName()) end
         
-        --if criteria then -- get criteria
+        --f.data['availableRanks'] = availableRanks(node['tooltip']['objectives'], f.data['rank'])
+
+        --print(f:availableRanks())
+
         if f.data['unlocked'] then
-            if f.data['rank'] < f.data['maxRank'] then
+            if f:availableRanks() > 0 then
                 f.data['rank'] = f.data['rank'] + 1
-            end
-            if f.data['rank'] >= f.data['ranks'] then
-                f.data['completed'] = true
+                
+                if f.data['rank'] >= f.data['ranks'] then
+                    f.data['completed'] = true
+                end
             end
         end
         updateNodes()
@@ -255,7 +339,17 @@ else
 end
 
 
+local function OnEvent(self, event, ...)
+	updateNodes()
 
+    --show graphical message that new nodes are available
+end
+
+local eventTrace = CreateFrame("Frame")
+eventTrace:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
+eventTrace:RegisterEvent("QUEST_COMPLETE")
+eventTrace:RegisterEvent("BAG_UPDATE")
+eventTrace:SetScript("OnEvent", OnEvent)
 
 
 -- UI.SubFrames[1]:SetSize(100, 100)
