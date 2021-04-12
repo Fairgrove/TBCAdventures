@@ -19,6 +19,7 @@ UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
 UI.title:SetPoint("TOP", 0, -5)
 UI.title:SetText("Adventure Guide")
+
 --Tooltip Creation
 -------------------------------------
 local function genItemText(items)
@@ -49,10 +50,10 @@ local function genQuestText(questIDs)
     local str ="Quest Requirements:\n"
     
     for i in pairs(questIDs) do
-        if C_QuestLog.IsQuestFlaggedCompleted(questIDs[i]) then
-            str = str .. "|cffffffff - |r|cff90EE90" .. C_QuestLog.GetTitleForQuestID(questIDs[i]) .. "|r\n"
+        if IsQuestFlaggedCompleted(questIDs[i]) then
+            str = str .. "|cffffffff - |r|cff90EE90" .. C_QuestLog.GetQuestInfo(questIDs[i]) .. "|r\n"
         else
-            str = str .. "|cffffffff - " .. C_QuestLog.GetTitleForQuestID(questIDs[i]) .. "|r\n"
+            str = str .. "|cffffffff - " .. C_QuestLog.GetQuestInfo(questIDs[i]) .. "|r\n"
         end
     end
     return str
@@ -103,7 +104,7 @@ local function questCriteria(questList)
     if #questList > 0 then
         local counter = 0
         for i, v in pairs(questList) do
-            if C_QuestLog.IsQuestFlaggedCompleted(v) then
+            if IsQuestFlaggedCompleted(v) then
                 counter = counter + 1
             end
         end

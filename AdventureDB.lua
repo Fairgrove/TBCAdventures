@@ -21,7 +21,7 @@ nodeDB.nodeData = {
                     {"Hearthstone", 1}, -- item, items needed
                 },
                 ['quest'] = {
-                    28713, -- Quest ID
+                    456, -- Quest ID
                 },
                 ['reputation'] = {
                     {69, 5}, --reputation ID, Standing Requirement, 4 = neutral
