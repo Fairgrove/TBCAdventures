@@ -5,8 +5,8 @@ debug = true
 --NAMESPACE
 -------------------------------------
 local _, core = ...; -- Namespace
-local nodeDB = core.nodeDB.nodeData
-local nodeIDs = core.nodeDB.debugNodeIDs
+local nodeDB = core.nodeDB.dummyData
+local nodeIDs = core.nodeDB.dummyIDs
 
 --Creating UI Frame
 -------------------------------------
@@ -46,6 +46,29 @@ local function genItemText(items)
     return str
 end
 
+local function genLevelText(level)
+    if UnitLevel("player") >= tonumber(level) then
+        return "|cff90EE90Reach Level " .. level .. "|r\n"
+    else
+        return "|cffffffffReach Level " .. level .. "|r\n"
+    end
+end
+
+local function genSpellText(spellIDs)
+    local str ="Skill Requirements:\n"
+
+    for i in pairs(spellIDs) do
+        local spell = IsPlayerSpell(spellIDs[i])
+        
+        if spell then
+            str = str .. "|cff90EE90Learn " .. GetSpellInfo(spellIDs[i]) .. "|r\n"
+        else
+            str = str .. "|cffffffffLearn " .. GetSpellInfo(spellIDs[i]) .. "|r\n"
+        end
+    end
+    return str
+end
+
 local function genQuestText(questIDs)
     local str ="Quest Requirements:\n"
     
@@ -79,6 +102,12 @@ local function createTooltip(tooltipData)
     local str = "|cffff00ff" .. tooltipData['titleText'] .."|r\n"
 
     for key, objective in pairs(tooltipData['objectives']) do
+        
+
+        if key == 'spell' then
+            str = str .. genSpellText(objective)
+        end
+
         if key == 'item' then
             str = str .. genItemText(objective)
         end
@@ -90,7 +119,11 @@ local function createTooltip(tooltipData)
         if key == 'reputation' then
             str = str .. genRepText(objective)
         end
-        
+
+        if key == 'level' then
+            str = str .. genLevelText(objective)
+        end
+
         --NYI
         -- if key == 'bosskill' then
         --     str = str .. "Bosses Killed:\n"
@@ -98,6 +131,37 @@ local function createTooltip(tooltipData)
     end
     
     return str
+end
+
+local function levelCriteria(level)
+    if level > 0 then
+        if UnitLevel("player") >= tonumber(level) then
+            return 1
+        else
+            return 0
+        end
+    else
+        return 0
+    end
+end
+
+local function spellCriteria(spellIDs)
+    if #spellIDs > 0 then
+        local counter = 0
+        for i, v in pairs(spellIDs) do
+            local spell = IsPlayerSpell(v)
+            if spell then
+                counter = counter + 1
+            end
+        end
+        if counter == #spellIDs then
+            return 1
+        else
+            return 0
+        end
+    else
+        return 0
+    end
 end
 
 local function questCriteria(questList)
@@ -167,6 +231,14 @@ local function getRanks(criteria)
         end
     end
     
+    if criteria['level'] > 0 then
+        ret = ret + 1
+    end
+
+    if #criteria['spell'] > 0 then
+        ret = ret + 1
+    end
+
     if #criteria['item'] > 0 then
         ret = ret + 1
     end
@@ -189,7 +261,7 @@ local function updateNodes()
             if v == -1 then -- prereq = -1 means no prereqs
                 counter = counter + 1
             else
-                if UI.SubFrames[v].data['completed'] == true then --v = prereqid, if prereqid = completed counter++
+                if UI.SubFrames[v].data['completed'] then --v = prereqid, if prereqid = completed counter++
                     counter = counter + 1
                 end
             end
@@ -224,8 +296,7 @@ local function CreateSubFrame(self, node)
 --return (repCriteria(criteria['reputation']) + itemCriteria(criteria['item']) + questCriteria(criteria['quest'])) - rank
     f.data = {
         ['rank'] = 0,
-        ['ranks'] = getRanks(node['tooltip']['objectives']),
-        --['availableRanks'] = 0,
+        ['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
         ['text'] = "",
         ['preReqs'] = node['preReqs'],
         ['unlocked'] = false,
@@ -236,8 +307,10 @@ local function CreateSubFrame(self, node)
         local a = repCriteria(node['tooltip']['objectives']['reputation'])
         local b = itemCriteria(node['tooltip']['objectives']['item'])
         local c = questCriteria(node['tooltip']['objectives']['quest'])
+        local d = levelCriteria(node['tooltip']['objectives']['level'])
+        local e = spellCriteria(node['tooltip']['objectives']['spell'])
         
-        return a + b + c - f.data['rank']
+        return a + b + c + d + e - f.data['rank']
     end,
 
     f:SetSize(100, 100)
@@ -299,7 +372,7 @@ local function CreateSubFrame(self, node)
         --f.data['availableRanks'] = availableRanks(node['tooltip']['objectives'], f.data['rank'])
 
         --print(f:availableRanks())
-
+        print(f:availableRanks())
         if f.data['unlocked'] then
             if f:availableRanks() > 0 then
                 f.data['rank'] = f.data['rank'] + 1
@@ -309,6 +382,8 @@ local function CreateSubFrame(self, node)
                 end
             end
         end
+        print(f.data['unlocked'])
+        print(f.data['completed'])
         updateNodes()
     end)
     return f
@@ -339,7 +414,8 @@ else
     UI:Hide()
 end
 
-
+-- Event Tracing
+-------------------------------------
 local function OnEvent(self, event, ...)
 	updateNodes()
 
@@ -350,6 +426,8 @@ local eventTrace = CreateFrame("Frame")
 eventTrace:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
 eventTrace:RegisterEvent("QUEST_COMPLETE")
 eventTrace:RegisterEvent("BAG_UPDATE")
+-- eventTrace:RegisterEvent("PLAYER_LEVEL_UP")
+-- eventTrace:RegisterEvent("LEARNED_SPELL_IN_TAB")
 eventTrace:SetScript("OnEvent", OnEvent)
 
 
