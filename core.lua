@@ -47,6 +47,9 @@ local function genItemText(items)
 end
 
 local function genLevelText(level)
+    if level == 0 then
+        return ""
+    end
     if UnitLevel("player") >= tonumber(level) then
         return "|cff90EE90Reach Level " .. level .. "|r\n"
     else

@@ -103,7 +103,7 @@ nodeDB.dummyData = {
         ['tooltip'] = {
             ['titleText'] = "Learn Sinister Strike",
             ['objectives'] = {
-                ['level'] = 2,
+                ['level'] = 0,
                 ['spell'] = {
                     1752,
                 },
