@@ -2,7 +2,7 @@
 ## Title: Achievement
 ## Author: Terranite / Fagerlund
 ## Version: 1.0
-## SavedVariables: TBCAdventuresDB
+## SavedVariablesPerCharacter: NODE_DATA
 ## Notes: a
 
 

@@ -1,6 +1,11 @@
 --Debug Stuff
 -------------------------------------
 debug = true
+local function debugPrinter(thing)
+    if debug then
+        print(thing)
+    end
+end
 
 --NAMESPACE
 -------------------------------------
@@ -20,11 +25,16 @@ UI.title:SetFontObject("GameFontHighlight")
 UI.title:SetPoint("TOP", 0, -5)
 UI.title:SetText("Adventure Guide")
 
+
+
 --Tooltip Creation
 -------------------------------------
 local function genItemText(items)
-    local str ="Items Needed:\n"
-            
+    local str = ""
+    if #items > 0 then
+        str ="Items Needed:\n"
+    end
+         
     for i in pairs(items) do
         local itemName = items[i][1]
         local itemCount = GetItemCount(items[i][1])
@@ -58,13 +68,16 @@ local function genLevelText(level)
 end
 
 local function genSpellText(spellIDs)
-    local str ="Skill Requirements:\n"
+    local str = ""
+    if #spellIDs > 0 then
+        str ="Skill Requirements:\n"
+    end
 
     for i in pairs(spellIDs) do
         local spell = IsPlayerSpell(spellIDs[i])
         
         if spell then
-            str = str .. "|cff90EE90Learn " .. GetSpellInfo(spellIDs[i]) .. "|r\n"
+            str = str .. "|cffffffff - |r|cff90EE90" .. GetSpellInfo(spellIDs[i]) .. "|r\n"
         else
             str = str .. "|cffffffffLearn " .. GetSpellInfo(spellIDs[i]) .. "|r\n"
         end
@@ -73,8 +86,11 @@ local function genSpellText(spellIDs)
 end
 
 local function genQuestText(questIDs)
-    local str ="Quest Requirements:\n"
-    
+    local str = ""
+    if #questIDs > 0 then
+        str ="Quest Requirements:\n"
+    end
+
     for i in pairs(questIDs) do
         if IsQuestFlaggedCompleted(questIDs[i]) then
             str = str .. "|cffffffff - |r|cff90EE90" .. C_QuestLog.GetQuestInfo(questIDs[i]) .. "|r\n"
@@ -87,8 +103,11 @@ end
 
 local function genRepText(reps)
     --if hasRep or not isHeader then
-    local str ="Reputations Needed:\n"
-    
+    local str = ""
+    if #reps > 0 then
+        str ="Reputations Needed:\n"
+    end
+
     for i in pairs(reps) do
         local name, _, standing= GetFactionInfoByID(reps[i][1])
         local repReq = reps[i][2]
@@ -105,7 +124,9 @@ local function createTooltip(tooltipData)
     local str = "|cffff00ff" .. tooltipData['titleText'] .."|r\n"
 
     for key, objective in pairs(tooltipData['objectives']) do
-        
+        if key == 'level' then
+            str = str .. genLevelText(objective)
+        end
 
         if key == 'spell' then
             str = str .. genSpellText(objective)
@@ -123,9 +144,7 @@ local function createTooltip(tooltipData)
             str = str .. genRepText(objective)
         end
 
-        if key == 'level' then
-            str = str .. genLevelText(objective)
-        end
+        
 
         --NYI
         -- if key == 'bosskill' then
@@ -254,9 +273,13 @@ local function getRanks(criteria)
 end
 
 local function updateNodes()
-    for i, er in pairs(UI.SubFrames) do
-        --save rank
-            -- import from savedVariables for character name
+    for i, v in pairs(UI.SubFrames) do
+        if UI.SubFrames[i].data['rank'] >= UI.SubFrames[i].data['ranks'] then
+            UI.SubFrames[i].data['completed'] = true
+        else 
+            UI.SubFrames[i].data['completed'] = false
+        end
+        --UI.SubFrames[i].data['rank'] = savedNodeData[i]
         
         -- updateUnlockedStatus 
         local counter = 0 -- counter for counting # reqs are completed
@@ -328,7 +351,7 @@ local function CreateSubFrame(self, node)
     f.Glow = f:CreateTexture(nil, "ARTWORK", nil, 5)
     f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", 10, -10)
     f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -10, 10)
-    f.Glow:SetTexture("Interface/Masks/CircleMaskScalable")
+    f.Glow:SetTexture("Interface/GLUES/Models/UI_SCOURGE/T_VFX_Glow01_64")
     f.Glow:SetVertexColor(0, 0, 0, 0)
 
     f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
@@ -337,14 +360,15 @@ local function CreateSubFrame(self, node)
     f.Ring:SetVertexColor(1, 1, 1, 1)
     
     f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 4)
-    f.DesaturateMask:SetPoint("TOPLEFT", f ,"TOPLEFT", 20, -20)
-    f.DesaturateMask:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -20, 20)
-    f.DesaturateMask:SetTexture("Interface/Masks/CircleMaskScalable")
-    f.DesaturateMask:SetVertexColor(0, 0, 0, 0.5)
+    f.DesaturateMask:SetAllPoints()
+    --f.DesaturateMask:SetPoint("TOPLEFT", f ,"TOPLEFT", 20, -20)
+    --f.DesaturateMask:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -20, 20)
+    f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/Masks/CircleMaskScalable"
+    f.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
 
-    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 6)
     f.Available:SetAllPoints()
-    f.Available:SetTexture("Interface/Masks/CircleMaskScalable")
+    f.Available:SetTexture("Interface/GLUES/Models/UI_SCOURGE/T_VFX_Glow01_64")
     f.Available:SetVertexColor(1, 1, 1, 1)
 
     f.text = f:CreateFontString(nil, "OVERLAY")
@@ -359,7 +383,7 @@ local function CreateSubFrame(self, node)
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", -25, 25);
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
-        f.Glow:SetVertexColor(1, 1, 1, 0.2)
+        f.Glow:SetVertexColor(1, 1, 1, 0.7)
     end)
     
     --On Mouseover leave
@@ -370,23 +394,13 @@ local function CreateSubFrame(self, node)
     
     --On Click
     f:SetScript("OnClick", function(self)
-        if debug then print("Clicked: " .. f:GetName()) end
-        
-        --f.data['availableRanks'] = availableRanks(node['tooltip']['objectives'], f.data['rank'])
-
-        --print(f:availableRanks())
-        print(f:availableRanks())
+        debugPrinter("Clicked: " .. f:GetName())
+        debugPrinter("   Rank " .. f.data['rank'])
         if f.data['unlocked'] then
             if f:availableRanks() > 0 then
                 f.data['rank'] = f.data['rank'] + 1
-                
-                if f.data['rank'] >= f.data['ranks'] then
-                    f.data['completed'] = true
-                end
             end
         end
-        print(f.data['unlocked'])
-        print(f.data['completed'])
         updateNodes()
     end)
     return f
@@ -399,23 +413,20 @@ for i, v in pairs(nodeIDs) do
 end
 updateNodes()
 
--- for debugging
-if debug then
-    local DebugFrame = CreateFrame("Button", nil, UIParent)
-    DebugFrame:SetSize(100, 100)
-    DebugFrame:SetPoint("CENTER", UIParent, "CENTER", -800, 0)
-
-    DebugFrame.Icon = DebugFrame:CreateTexture(nil, "ARTWORK", nil, 1)
-    DebugFrame.Icon:SetAllPoints()
-    DebugFrame.Icon:SetTexture("interface/icons/inv_mushroom_11")
-    
-    DebugFrame:SetScript("OnClick", function(self)
-        updateNodes()
-        UI:Show()
-    end)
-else
-    UI:Hide()
+--Commands
+-------------------------------------
+SLASH_SHOWTBCUI1, SLASH_CLEARTBCDATA1 = '/tbcShow', "/TBCCLEAR"
+function SlashCmdList.SHOWTBCUI(msg, editBox) -- 4.
+    UI:Show()
+    updateNodes()
 end
+function SlashCmdList.CLEARTBCDATA(msg, editBox) -- 4.
+    for i, v in pairs(UI.SubFrames) do
+        UI.SubFrames[i].data['rank'] = 0
+    end
+    updateNodes()
+end
+
 
 -- Event Tracing
 -------------------------------------
@@ -429,24 +440,32 @@ local eventTrace = CreateFrame("Frame")
 eventTrace:RegisterEvent("CHAT_MSG_COMBAT_FACTION_CHANGE")
 eventTrace:RegisterEvent("QUEST_COMPLETE")
 eventTrace:RegisterEvent("BAG_UPDATE")
--- eventTrace:RegisterEvent("PLAYER_LEVEL_UP")
--- eventTrace:RegisterEvent("LEARNED_SPELL_IN_TAB")
+eventTrace:RegisterEvent("PLAYER_LEVEL_UP")
+eventTrace:RegisterEvent("LEARNED_SPELL_IN_TAB")
 eventTrace:SetScript("OnEvent", OnEvent)
 
 
--- UI.SubFrames[1]:SetSize(100, 100)
-
--- this has to be at the end of the code, idk why.
--- tinsert(UISpecialFrames, UI:GetName())
--- UI:SetScript("OnEscapePressed", function()
---     UI:Hide()
--- end)
-
-
---this could be used for ranks???? 
-    --like for getting honored with Keepers of time, each rep rank is a rank on the node
-    --also get a litte square arround the numbers
-    --also get a bit more creative with the design, dont just copy artifact UI :)
-    -- f.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    -- f.text:SetPoint("CENTER")
-    -- f.text:SetText(f:GetName())
+-- Loading Saved Variables
+-------------------------------------
+local SavedVariables = CreateFrame("Frame")
+SavedVariables:RegisterEvent("PLAYER_LOGOUT")
+SavedVariables:RegisterEvent("ADDON_LOADED")
+SavedVariables:SetScript("OnEvent", function(self, event, arg1)
+    if event == "ADDON_LOADED" and arg1 == "TBCAdventures" then
+        if NODE_DATA == nil then
+            NODE_DATA = {}
+        end
+        for i, v in pairs(UI.SubFrames) do
+            UI.SubFrames[i].data['rank'] = NODE_DATA[i]
+        end
+        print(arg1 .. " Loaded")
+        updateNodes()
+        UI:Hide()
+    end
+    if event == "PLAYER_LOGOUT" then
+        NODE_DATA = {}
+        for i, v in pairs(UI.SubFrames) do
+            NODE_DATA[#NODE_DATA + 1] = UI.SubFrames[i].data['rank']
+        end
+    end
+end)

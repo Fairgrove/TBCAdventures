@@ -157,10 +157,12 @@ nodeDB.dummyData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {"Pendulum of Doom", 1}
                 },
                 ['quest'] = { 
                 },
                 ['reputation'] = {
+                    {69, 6},
                 },
                 ['bosskill'] = {
                     "yes",
