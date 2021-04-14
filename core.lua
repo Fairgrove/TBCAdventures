@@ -272,50 +272,72 @@ local function getRanks(criteria)
     return ret
 end
 
-local function getCompleteStatus(node)
-    if node.data['rank'] >= node.data['ranks'] then
+local function getCompleteStatus(self)
+    if self.data['rank'] >= self.data['ranks'] then
         return true
     else
         return false
     end
 end
 
-local function getUnlockStatus(node)
-    if node['preReqs'][1] == -1 then
-        return true
-    else
-        local counter = 0
-        for i, ID in pairs(node['preReqs']) do
+local function getUnlockStatus(self)
+    local counter = 0
+    if #self.data['preReq'] > 0 then
+        for i, ID in pairs(self.data['preReq']) do
             if getCompleteStatus(UI.SubFrames[ID]) then
                 counter = counter + 1
             end
         end
-        if counter == #node['preReqs'] then
+        if counter >= #self.data['preReq'] then
             return true
         else 
             return false
         end
+    else 
+        return true
     end
-    
 end
 
-local function updateNode()
+local function updateAllNodes()
     for i, node in pairs(UI.SubFrames) do
-        getUnlockStatus(node)
+        
+        -- updateText
+        node.text:SetText(tostring(node.data['rank']) .. "/" .. tostring(node.data['ranks']))
+        
+        -- updateTexture
+        if getUnlockStatus(node) then
+            if node:availableRanks() > 0 then
+                node.Available:Show()
+            else 
+                node.Available:Hide()
+            end
+            node.DesaturateMask:Hide()
+            node.text:Show()
+            
+        else 
+            node.Available:Hide()
+            node.DesaturateMask:Show()
+            node.text:Hide()
+        end
+
     end
 end
 
+local function showUI()
+    updateAllNodes()
+    UI:Show()
+end
 
 local function CreateSubFrame(self, node)
     local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
---return (repCriteria(criteria['reputation']) + itemCriteria(criteria['item']) + questCriteria(criteria['quest'])) - rank
+
     f.data = {
         ['rank'] = 0,
         ['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
         ['text'] = "",
-        ['preReqs'] = node['preReqs'],
+        ['preReq'] = node['preReq'],
     }
-
+    
     f.availableRanks = function (self)
         local a = repCriteria(node['tooltip']['objectives']['reputation'])
         local b = itemCriteria(node['tooltip']['objectives']['item'])
@@ -325,7 +347,7 @@ local function CreateSubFrame(self, node)
         
         return a + b + c + d + e - f.data['rank']
     end,
-
+    
     f:SetSize(100, 100)
 
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
@@ -371,12 +393,7 @@ local function CreateSubFrame(self, node)
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
         f.Glow:SetVertexColor(1, 1, 1, 0.7)
-
-        debugPrinter("Clicked: " .. f:GetName())
-        debugPrinter("   Rank " .. f.data['rank'])
-        debugPrinter("   Ranks " .. f.data['ranks'])
-        debugPrinter("   avail ranks: " .. f:availableRanks())
-
+        
     end)
     
     --On Mouseover leave
@@ -387,20 +404,16 @@ local function CreateSubFrame(self, node)
     
     --On Click
     f:SetScript("OnClick", function(self)
-        --updateNode()
         if getUnlockStatus(f) then
-            print (1)
-        else 
-            print (0)
-        end
-        if getUnlockStatus(f) then
-            if f:availableRanks() > 0 then
-                f.data['rank'] = f.data['rank'] + 1
-
+            if f.availableRanks() > 0 then
+                if f.data['rank'] < f.data['ranks'] then
+                    f.data['rank'] = f.data['rank'] + 1
+                    updateAllNodes()
+                end
             end
         end
- 
     end)
+    
     return f
 end
 
@@ -414,8 +427,7 @@ end
 -------------------------------------
 SLASH_SHOWTBCUI1, SLASH_CLEARTBCDATA1 = '/tbcShow', "/TBCCLEAR"
 function SlashCmdList.SHOWTBCUI(msg, editBox) -- 4.
-    UI:Show()
- 
+    showUI()
 end
 function SlashCmdList.CLEARTBCDATA(msg, editBox) -- 4.
     for i, v in pairs(UI.SubFrames) do
@@ -428,7 +440,7 @@ end
 -- Event Tracing
 -------------------------------------
 local function OnEvent(self, event, ...)
-
+    updateAllNodes()
 
     --show graphical message that new nodes are available
 end
@@ -452,12 +464,16 @@ SavedVariables:SetScript("OnEvent", function(self, event, arg1)
         
         if NODE_DATA == nil then
             NODE_DATA = {}
-        end
+        end  
         debugPrinter(#UI.SubFrames)
-        
         for i, v in pairs(UI.SubFrames) do
-            UI.SubFrames[i].data['rank'] = NODE_DATA[i]
+            if NODE_DATA[i] == nil then
+                UI.SubFrames[i].data['rank'] = 0
+            else
+                UI.SubFrames[i].data['rank'] = NODE_DATA[i]
+            end  
         end
+        
         print(arg1 .. " Loaded")
 
         UI:Hide()
