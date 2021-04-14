@@ -10,8 +10,8 @@ end
 --NAMESPACE
 -------------------------------------
 local _, core = ...; -- Namespace
-local nodeDB = core.nodeDB.dummyData
-local nodeIDs = core.nodeDB.dummyIDs
+local nodeDB = core.nodeDB.newData
+local nodeIDs = core.nodeDB.newIDs
 
 --Creating UI Frame
 -------------------------------------
@@ -272,50 +272,39 @@ local function getRanks(criteria)
     return ret
 end
 
-local function updateNodes()
-    for i, v in pairs(UI.SubFrames) do
-        if UI.SubFrames[i].data['rank'] >= UI.SubFrames[i].data['ranks'] then
-            UI.SubFrames[i].data['completed'] = true
-        else 
-            UI.SubFrames[i].data['completed'] = false
-        end
-        --UI.SubFrames[i].data['rank'] = savedNodeData[i]
-        
-        -- updateUnlockedStatus 
-        local counter = 0 -- counter for counting # reqs are completed
-        for j, v in pairs(UI.SubFrames[i].data['preReqs']) do --iterate prereqs for current node
-            if v == -1 then -- prereq = -1 means no prereqs
-                counter = counter + 1
-            else
-                if UI.SubFrames[v].data['completed'] then --v = prereqid, if prereqid = completed counter++
-                    counter = counter + 1
-                end
-            end
-        end
-        if counter == #UI.SubFrames[i].data['preReqs'] then 
-            UI.SubFrames[i].data['unlocked'] = true
-        end
-
-        -- updateText
-        UI.SubFrames[i].text:SetText(tostring(UI.SubFrames[i].data['rank']) .. "/" .. tostring(UI.SubFrames[i].data['ranks']))
-
-        -- updateTexture
-        if UI.SubFrames[i].data['unlocked'] then
-            if UI.SubFrames[i]:availableRanks() > 0 then
-                UI.SubFrames[i].Available:Show()
-            else 
-                UI.SubFrames[i].Available:Hide()
-            end
-            UI.SubFrames[i].DesaturateMask:Hide()
-            UI.SubFrames[i].text:Show()
-            
-        else 
-            UI.SubFrames[i].Available:Hide()
-            UI.SubFrames[i].DesaturateMask:Show()
-            UI.SubFrames[i].text:Hide()
-        end
+local function getCompleteStatus(node)
+    if node.data['rank'] >= node.data['ranks'] then
+        return true
+    else
+        return false
     end
 end
+
+local function getUnlockStatus(node)
+    if node['preReqs'][1] == -1 then
+        return true
+    else
+        local counter = 0
+        for i, ID in pairs(node['preReqs']) do
+            if getCompleteStatus(UI.SubFrames[ID]) then
+                counter = counter + 1
+            end
+        end
+        if counter == #node['preReqs'] then
+            return true
+        else 
+            return false
+        end
+    end
+    
+end
+
+local function updateNode()
+    for i, node in pairs(UI.SubFrames) do
+        getUnlockStatus(node)
+    end
+end
+
 
 local function CreateSubFrame(self, node)
     local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
@@ -325,8 +314,6 @@ local function CreateSubFrame(self, node)
         ['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
         ['text'] = "",
         ['preReqs'] = node['preReqs'],
-        ['unlocked'] = false,
-        ['completed'] = false,
     }
 
     f.availableRanks = function (self)
@@ -366,9 +353,9 @@ local function CreateSubFrame(self, node)
     f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/Masks/CircleMaskScalable"
     f.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
 
-    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 6)
+    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
     f.Available:SetAllPoints()
-    f.Available:SetTexture("Interface/GLUES/Models/UI_SCOURGE/T_VFX_Glow01_64")
+    f.Available:SetTexture("Interface/GLUES/Models/UI_SCOURGE/a")
     f.Available:SetVertexColor(1, 1, 1, 1)
 
     f.text = f:CreateFontString(nil, "OVERLAY")
@@ -384,6 +371,12 @@ local function CreateSubFrame(self, node)
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
         f.Glow:SetVertexColor(1, 1, 1, 0.7)
+
+        debugPrinter("Clicked: " .. f:GetName())
+        debugPrinter("   Rank " .. f.data['rank'])
+        debugPrinter("   Ranks " .. f.data['ranks'])
+        debugPrinter("   avail ranks: " .. f:availableRanks())
+
     end)
     
     --On Mouseover leave
@@ -394,14 +387,19 @@ local function CreateSubFrame(self, node)
     
     --On Click
     f:SetScript("OnClick", function(self)
-        debugPrinter("Clicked: " .. f:GetName())
-        debugPrinter("   Rank " .. f.data['rank'])
-        if f.data['unlocked'] then
+        --updateNode()
+        if getUnlockStatus(f) then
+            print (1)
+        else 
+            print (0)
+        end
+        if getUnlockStatus(f) then
             if f:availableRanks() > 0 then
                 f.data['rank'] = f.data['rank'] + 1
+
             end
         end
-        updateNodes()
+ 
     end)
     return f
 end
@@ -411,27 +409,26 @@ end
 for i, v in pairs(nodeIDs) do
     tinsert(UI.SubFrames, CreateSubFrame(UI, nodeDB[v]))
 end
-updateNodes()
 
 --Commands
 -------------------------------------
 SLASH_SHOWTBCUI1, SLASH_CLEARTBCDATA1 = '/tbcShow', "/TBCCLEAR"
 function SlashCmdList.SHOWTBCUI(msg, editBox) -- 4.
     UI:Show()
-    updateNodes()
+ 
 end
 function SlashCmdList.CLEARTBCDATA(msg, editBox) -- 4.
     for i, v in pairs(UI.SubFrames) do
         UI.SubFrames[i].data['rank'] = 0
     end
-    updateNodes()
+   
 end
 
 
 -- Event Tracing
 -------------------------------------
 local function OnEvent(self, event, ...)
-	updateNodes()
+
 
     --show graphical message that new nodes are available
 end
@@ -452,14 +449,17 @@ SavedVariables:RegisterEvent("PLAYER_LOGOUT")
 SavedVariables:RegisterEvent("ADDON_LOADED")
 SavedVariables:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == "TBCAdventures" then
+        
         if NODE_DATA == nil then
             NODE_DATA = {}
         end
+        debugPrinter(#UI.SubFrames)
+        
         for i, v in pairs(UI.SubFrames) do
             UI.SubFrames[i].data['rank'] = NODE_DATA[i]
         end
         print(arg1 .. " Loaded")
-        updateNodes()
+
         UI:Hide()
     end
     if event == "PLAYER_LOGOUT" then

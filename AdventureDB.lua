@@ -52,7 +52,7 @@ nodeDB.debugData = {
                     6743, --riding in TBC = 762
                 },
                 ['item'] = {
-                    {"Hearthstone", 1},
+                    {'Hearthstone', 1},
                 },
                 ['quest'] = {
                     456,
@@ -64,8 +64,7 @@ nodeDB.debugData = {
                     "yes",
                 },
             },
-        }
-        
+        },       
     },
 }
 
@@ -75,9 +74,9 @@ nodeDB.dummyData = {
         ['y'] = -200,
         ['type'] = 1, 
         ['preReqs'] = {-1,}, 
-        ['icon']  = "interface/icons/spell_nature_swiftness",
+        ['icon']  = 'interface/icons/spell_nature_swiftness',
         ['tooltip'] = {
-            ['titleText'] = "Reach Level 2",
+            ['titleText'] = 'Reach Level 2',
             ['objectives'] = {
                 ['level'] = 2, --0 for none
                 ['spell'] = {
@@ -89,7 +88,7 @@ nodeDB.dummyData = {
                 ['reputation'] = {
                 },
                 ['bosskill'] = {
-                    "yes",
+                    'yes',
                 },
             },
         },
@@ -171,6 +170,188 @@ nodeDB.dummyData = {
         }   
     },
 }
+
+nodeDB.newData = {
+    [1] = {
+        ['x'] = -300,
+        ['y'] = -300,
+        ['type'] = 1,
+        ['preReq'] = {-1,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [2] = {
+        ['x'] = -200,
+        ['y'] = -300,
+        ['type'] = 1,
+        ['preReq'] = {1,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 0,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                    456,
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [3] = {
+        ['x'] = -100,
+        ['y'] = -200,
+        ['type'] = 1,
+        ['preReq'] = {1,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 0,
+                ['spell'] = {
+                },
+                ['item'] = {
+                    {'Hearthstone', 1},
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [4] = {
+        ['x'] = 0,
+        ['y'] = -200,
+        ['type'] = 1,
+        ['preReq'] = {2,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 2,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [5] = {
+        ['x'] = 100,
+        ['y'] = -200,
+        ['type'] = 1,
+        ['preReq'] = {2,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 0,
+                ['spell'] = {
+                    6743,
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [6] = {
+        ['x'] = 200,
+        ['y'] = -100,
+        ['type'] = 1,
+        ['preReq'] = {4,5,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 0,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                    {69, 6},
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+    [7] = {
+        ['x'] = 300,
+        ['y'] = -100,
+        ['type'] = 1,
+        ['preReq'] = {6,},
+        ['icon'] = 'interface/icons/inv_misc_rune_01',
+        ['tooltip'] = {
+            ['titleText'] = 'pepega Clap',
+            ['objectives'] = {
+                ['level'] = 0,
+                ['spell'] = {
+                    6743,
+                },
+                ['item'] = {
+                    {'Worn Bow', 1},
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                    'yes',
+                },
+            },
+        },
+    },
+}
+
+nodeDB.newIDs = {
+    1,2,3,4,5,6,7
+}
+
 
 nodeDB.dummyIDs = {
     1,2,3,4
