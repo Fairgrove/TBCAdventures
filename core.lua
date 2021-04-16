@@ -16,7 +16,7 @@ local nodeIDs = core.nodeDB.newIDs
 --Creating UI Frame
 -------------------------------------
 local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
-UI:SetSize(1000, 800) --x, y
+UI:SetSize(1100, 900) --x, y
 UI:SetPoint("CENTER", UIParent, "CENTER")
 UI.SubFrames = {}
 
@@ -225,7 +225,7 @@ local function itemCriteria(itemList)
     end
 end
 
-local function repCriteria(repList)
+local function OLD_repCriteria(repList)
     if #repList > 0 then
         local counter = 0
         local neutral = 4 --standingID for neutal
@@ -245,35 +245,50 @@ local function repCriteria(repList)
     end
 end
 
-local function getRanks(criteria)
-    local ret = 0
-    if #criteria['reputation'] > 0 then
-        for i in pairs(criteria['reputation']) do
-            ret = ret + (criteria['reputation'][i][2] - 4)
+local function repCriteria(repList)
+    if #repList > 0 then
+        local counter = 0
+        for i in pairs(repList) do
+            local name, _, standing= GetFactionInfoByID(repList[i][1])
+            local repReq = repList[i][2]
+            
+            if standing >= repReq then
+                counter = counter + 1
+            end
         end
+        return counter
+    else
+        return 0
+    end
+end
+
+local function getRanks(criteria)
+    local counter = 0
+    if #criteria['reputation'] > 0 then
+        counter = counter + 1
     end
     
     if criteria['level'] > 0 then
-        ret = ret + 1
+        counter = counter + 1
     end
 
     if #criteria['spell'] > 0 then
-        ret = ret + 1
+        counter = counter + 1
     end
 
     if #criteria['item'] > 0 then
-        ret = ret + 1
+        counter = counter + 1
     end
     
     if #criteria['quest'] > 0 then
-        ret = ret + 1
+        counter = counter + 1
     end
     
-    return ret
+    return counter
 end
 
 local function getCompleteStatus(self)
-    if self.data['rank'] >= self.data['ranks'] then
+    if self.data['rank'] >= 1 then
         return true
     else
         return false
@@ -302,11 +317,11 @@ local function updateAllNodes()
     for i, node in pairs(UI.SubFrames) do
         
         -- updateText
-        node.text:SetText(tostring(node.data['rank']) .. "/" .. tostring(node.data['ranks']))
+        node.text:SetText(tostring(node.data['rank']) .. "/ 1")
         
         -- updateTexture
         if getUnlockStatus(node) then
-            if node:availableRanks() > 0 then
+            if node:availableRanks() and node.data['rank'] == 0 then
                 node.Available:Show()
             else 
                 node.Available:Hide()
@@ -333,7 +348,7 @@ local function CreateSubFrame(self, node)
 
     f.data = {
         ['rank'] = 0,
-        ['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
+        --['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
         ['text'] = "",
         ['preReq'] = node['preReq'],
     }
@@ -344,16 +359,21 @@ local function CreateSubFrame(self, node)
         local c = questCriteria(node['tooltip']['objectives']['quest'])
         local d = levelCriteria(node['tooltip']['objectives']['level'])
         local e = spellCriteria(node['tooltip']['objectives']['spell'])
-        
-        return a + b + c + d + e - f.data['rank']
+
+        local g = a + b + c + d + e
+        if g == getRanks(node['tooltip']['objectives']) then
+            return true
+        else
+            return false
+        end
     end,
     
-    f:SetSize(100, 100)
+    f:SetSize(50, 50)
 
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
     --same as set SetAllPoints() this just resises the texture
-    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", 19, -19)  
-    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -19, 19)
+    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", 7, -7)  
+    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -7, 7)
     f.Icon:SetTexture(node['icon'])
     f.Icon:SetVertexColor(1, 1, 1, 1)
 
@@ -377,7 +397,7 @@ local function CreateSubFrame(self, node)
 
     f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
     f.Available:SetAllPoints()
-    f.Available:SetTexture("Interface/GLUES/Models/UI_SCOURGE/a")
+    f.Available:SetTexture("Interface/AddOns/TBCAdventures/textures/Untitled.png")
     f.Available:SetVertexColor(1, 1, 1, 1)
 
     f.text = f:CreateFontString(nil, "OVERLAY")
@@ -405,9 +425,9 @@ local function CreateSubFrame(self, node)
     --On Click
     f:SetScript("OnClick", function(self)
         if getUnlockStatus(f) then
-            if f.availableRanks() > 0 then
-                if f.data['rank'] < f.data['ranks'] then
-                    f.data['rank'] = f.data['rank'] + 1
+            if f.availableRanks() then
+                if f.data['rank'] < 1 then
+                    f.data['rank'] = 1
                     updateAllNodes()
                 end
             end
