@@ -13,6 +13,19 @@ local _, core = ...; -- Namespace
 local nodeDB = core.nodeDB.newData
 local nodeIDs = core.nodeDB.newIDs
 
+--Type, Offset, Size, Color
+local nodesomething = {
+    {1, 10, 50, {0,0,1}},
+    {2, 20, 100, {1,1,0}},
+    {3, 10, 50, {0.67,0.84,0.9}},
+    {4, 10, 50, {0,1,0}},
+    {5, 10, 50, {0.5,0.5,0.5}},
+    {6, 20, 100, {1,0,0}},
+    {7, 6, 30, {0,1,0}},
+    {8, 10, 50, {1,1,0}},
+    {9, 10, 50, {1,0,0}},
+}
+
 --Creating UI Frame
 -------------------------------------
 local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
@@ -24,8 +37,6 @@ UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
 UI.title:SetPoint("TOP", 0, -5)
 UI.title:SetText("Adventure Guide")
-
-
 
 --Tooltip Creation
 -------------------------------------
@@ -317,22 +328,31 @@ local function updateAllNodes()
     for i, node in pairs(UI.SubFrames) do
         
         -- updateText
-        node.text:SetText(tostring(node.data['rank']) .. "/ 1")
+        --node.text:SetText(tostring(node.data['rank']) .. "/ 1")
         
         -- updateTexture
         if getUnlockStatus(node) then
+            node.Ring:SetVertexColor(node.data['ringColor'][1], node.data['ringColor'][2], node.data['ringColor'][3],1)
             if node:availableRanks() and node.data['rank'] == 0 then
                 node.Available:Show()
+                node.DesaturateMask:Hide()
             else 
                 node.Available:Hide()
+                node.DesaturateMask:SetVertexColor(1, 1, 1, 0.4)
             end
-            node.DesaturateMask:Hide()
-            node.text:Show()
+
+            if node.data['rank'] == 1 then
+                node.DesaturateMask:Hide()
+            end
+
+            --node.text:Show()
             
         else 
             node.Available:Hide()
             node.DesaturateMask:Show()
-            node.text:Hide()
+            node.Ring:SetVertexColor(0,0,0,1)
+            node.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
+            --node.text:Hide()
         end
 
     end
@@ -351,6 +371,7 @@ local function CreateSubFrame(self, node)
         --['ranks'] = getRanks(node['tooltip']['objectives']), --ranks to mark node as completed
         ['text'] = "",
         ['preReq'] = node['preReq'],
+        ['ringColor'] = {nodesomething[node['type']][4][1], nodesomething[node['type']][4][2], nodesomething[node['type']][4][3]}
     }
     
     f.availableRanks = function (self)
@@ -366,44 +387,42 @@ local function CreateSubFrame(self, node)
         else
             return false
         end
-    end,
+    end
     
-    f:SetSize(50, 50)
+    f:SetSize(nodesomething[node['type']][3], nodesomething[node['type']][3])
 
+    -- create subframes of icon
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
-    --same as set SetAllPoints() this just resises the texture
-    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", 7, -7)  
-    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -7, 7)
     f.Icon:SetTexture(node['icon'])
+    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", nodesomething[node['type']][2], -nodesomething[node['type']][2])  
+    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -nodesomething[node['type']][2], nodesomething[node['type']][2])
     f.Icon:SetVertexColor(1, 1, 1, 1)
 
     f.Glow = f:CreateTexture(nil, "ARTWORK", nil, 5)
-    f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", 10, -10)
-    f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -10, 10)
     f.Glow:SetTexture("Interface/GLUES/Models/UI_SCOURGE/T_VFX_Glow01_64")
+    f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", nodesomething[node['type']][2], -nodesomething[node['type']][2])
+    f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -nodesomething[node['type']][2], nodesomething[node['type']][2]) 
     f.Glow:SetVertexColor(0, 0, 0, 0)
 
     f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
     f.Ring:SetAllPoints()
     f.Ring:SetTexture("Interface/Artifacts/Artifacts-PerkRing-Final-Mask")
-    f.Ring:SetVertexColor(1, 1, 1, 1)
+    f.Ring:SetVertexColor(f.data['ringColor'][1], f.data['ringColor'][2], f.data['ringColor'][3],1)
     
     f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 4)
     f.DesaturateMask:SetAllPoints()
-    --f.DesaturateMask:SetPoint("TOPLEFT", f ,"TOPLEFT", 20, -20)
-    --f.DesaturateMask:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -20, 20)
     f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/Masks/CircleMaskScalable"
     f.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
 
-    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)    
     f.Available:SetAllPoints()
     f.Available:SetTexture("Interface/AddOns/TBCAdventures/textures/Untitled.png")
     f.Available:SetVertexColor(1, 1, 1, 1)
 
-    f.text = f:CreateFontString(nil, "OVERLAY")
-    f.text:SetFontObject("GameFontHighlight")
-    f.text:SetPoint("BOTTOM", 0, 0)
-    f.text:SetText(f.data['text'])
+    -- f.text = f:CreateFontString(nil, "OVERLAY")
+    -- f.text:SetFontObject("GameFontHighlight")
+    -- f.text:SetPoint("BOTTOM", 0, 0)
+    -- f.text:SetText(f.data['text'])
 
     f:SetPoint("CENTER", node['x'], node['y'])
     

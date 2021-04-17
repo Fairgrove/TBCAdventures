@@ -6,8 +6,8 @@ local nodeDB = core.nodeDB;
 nodeDB.newData = {
     [1] = {
         ['x'] = 0,
-        ['y'] = -360,
-        ['type'] = 1,
+        ['y'] = -342,
+        ['type'] = 6,
         ['preReq'] = {},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -29,9 +29,9 @@ nodeDB.newData = {
         },
     },
     [2] = {
-        ['x'] = 50,
-        ['y'] = -270,
-        ['type'] = 1,
+        ['x'] = 47,
+        ['y'] = -256,
+        ['type'] = 9,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -54,9 +54,9 @@ nodeDB.newData = {
         },
     },
     [3] = {
-        ['x'] = 220,
-        ['y'] = -220,
-        ['type'] = 1,
+        ['x'] = 209,
+        ['y'] = -209,
+        ['type'] = 5,
         ['preReq'] = {2,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -79,9 +79,9 @@ nodeDB.newData = {
         },
     },
     [4] = {
-        ['x'] = 160,
-        ['y'] = -220,
-        ['type'] = 1,
+        ['x'] = 152,
+        ['y'] = -209,
+        ['type'] = 5,
         ['preReq'] = {2,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -104,8 +104,8 @@ nodeDB.newData = {
         },
     },
     [5] = {
-        ['x'] = 290,
-        ['y'] = -125,
+        ['x'] = 275,
+        ['y'] = -118,
         ['type'] = 1,
         ['preReq'] = {3,4,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
@@ -129,10 +129,10 @@ nodeDB.newData = {
         },
     },
     [6] = {
-        ['x'] = 340,
-        ['y'] = -240,
-        ['type'] = 1,
-        ['preReq'] = {5,},
+        ['x'] = 323,
+        ['y'] = -228,
+        ['type'] = 5,
+        ['preReq'] = {5,9,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Arcatraz key fragment",
@@ -153,10 +153,10 @@ nodeDB.newData = {
         },
     },
     [7] = {
-        ['x'] = 160,
+        ['x'] = 152,
         ['y'] = 0,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['type'] = 4,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Revered Sha'tar",
@@ -177,9 +177,9 @@ nodeDB.newData = {
         },
     },
     [8] = {
-        ['x'] = 20,
-        ['y'] = -50,
-        ['type'] = 1,
+        ['x'] = 19,
+        ['y'] = -47,
+        ['type'] = 5,
         ['preReq'] = {7,5,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -201,10 +201,10 @@ nodeDB.newData = {
         },
     },
     [9] = {
-        ['x'] = 340,
-        ['y'] = -310,
+        ['x'] = 199,
+        ['y'] = -332,
         ['type'] = 1,
-        ['preReq'] = {},
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "kara into quest",
@@ -225,10 +225,10 @@ nodeDB.newData = {
         },
     },
     [10] = {
-        ['x'] = 410,
-        ['y'] = -310,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = 356,
+        ['y'] = -294,
+        ['type'] = 5,
+        ['preReq'] = {9,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "streamvault fragment",
@@ -249,10 +249,10 @@ nodeDB.newData = {
         },
     },
     [11] = {
-        ['x'] = 410,
-        ['y'] = -115,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = 389,
+        ['y'] = -109,
+        ['type'] = 5,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "shadow lab key in sethekk halls",
@@ -273,10 +273,10 @@ nodeDB.newData = {
         },
     },
     [12] = {
-        ['x'] = 410,
-        ['y'] = -240,
-        ['type'] = 1,
-        ['preReq'] = {11,},
+        ['x'] = 389,
+        ['y'] = -228,
+        ['type'] = 5,
+        ['preReq'] = {9,11,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "shadow lab fragment",
@@ -297,10 +297,10 @@ nodeDB.newData = {
         },
     },
     [13] = {
-        ['x'] = 440,
-        ['y'] = -420,
+        ['x'] = 418,
+        ['y'] = -399,
         ['type'] = 1,
-        ['preReq'] = {},
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "CoT entry quest",
@@ -321,9 +321,9 @@ nodeDB.newData = {
         },
     },
     [14] = {
-        ['x'] = 532,
-        ['y'] = -320,
-        ['type'] = 1,
+        ['x'] = 505,
+        ['y'] = -304,
+        ['type'] = 5,
         ['preReq'] = {13,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -345,9 +345,9 @@ nodeDB.newData = {
         },
     },
     [15] = {
-        ['x'] = 490,
-        ['y'] = -100,
-        ['type'] = 1,
+        ['x'] = 465,
+        ['y'] = -95,
+        ['type'] = 2,
         ['preReq'] = {14,12,10,9,6,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -369,10 +369,10 @@ nodeDB.newData = {
         },
     },
     [16] = {
-        ['x'] = 450,
-        ['y'] = 45,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = 427,
+        ['y'] = 42,
+        ['type'] = 8,
+        ['preReq'] = {24,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "gruul fragment",
@@ -393,10 +393,10 @@ nodeDB.newData = {
         },
     },
     [17] = {
-        ['x'] = 510,
-        ['y'] = 80,
-        ['type'] = 1,
-        ['preReq'] = {15,},
+        ['x'] = 484,
+        ['y'] = 76,
+        ['type'] = 8,
+        ['preReq'] = {15,24,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "nightbane fragment",
@@ -417,10 +417,10 @@ nodeDB.newData = {
         },
     },
     [18] = {
-        ['x'] = -310,
-        ['y'] = -320,
+        ['x'] = -294,
+        ['y'] = -304,
         ['type'] = 1,
-        ['preReq'] = {},
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "The Cipher of Damnation questline",
@@ -441,10 +441,10 @@ nodeDB.newData = {
         },
     },
     [19] = {
-        ['x'] = -355,
-        ['y'] = -420,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -337,
+        ['y'] = -399,
+        ['type'] = 4,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Revered Honor Hold",
@@ -465,10 +465,10 @@ nodeDB.newData = {
         },
     },
     [20] = {
-        ['x'] = -490,
-        ['y'] = -360,
+        ['x'] = -465,
+        ['y'] = -342,
         ['type'] = 1,
-        ['preReq'] = {},
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Shattered halls normal mode key",
@@ -489,8 +489,8 @@ nodeDB.newData = {
         },
     },
     [21] = {
-        ['x'] = -440,
-        ['y'] = -420,
+        ['x'] = -418,
+        ['y'] = -399,
         ['type'] = 1,
         ['preReq'] = {20,19,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
@@ -513,9 +513,9 @@ nodeDB.newData = {
         },
     },
     [22] = {
-        ['x'] = -400,
-        ['y'] = -325,
-        ['type'] = 1,
+        ['x'] = -380,
+        ['y'] = -308,
+        ['type'] = 3,
         ['preReq'] = {21,18,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -537,10 +537,10 @@ nodeDB.newData = {
         },
     },
     [23] = {
-        ['x'] = -90,
-        ['y'] = 30,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -85,
+        ['y'] = 28,
+        ['type'] = 4,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Revered Cenarion Expedition",
@@ -561,8 +561,8 @@ nodeDB.newData = {
         },
     },
     [24] = {
-        ['x'] = 40,
-        ['y'] = 45,
+        ['x'] = 38,
+        ['y'] = 42,
         ['type'] = 1,
         ['preReq'] = {23,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
@@ -585,8 +585,8 @@ nodeDB.newData = {
         },
     },
     [25] = {
-        ['x'] = -210,
-        ['y'] = -90,
+        ['x'] = -199,
+        ['y'] = -85,
         ['type'] = 1,
         ['preReq'] = {23,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
@@ -609,9 +609,9 @@ nodeDB.newData = {
         },
     },
     [26] = {
-        ['x'] = -440,
-        ['y'] = -230,
-        ['type'] = 1,
+        ['x'] = -418,
+        ['y'] = -218,
+        ['type'] = 3,
         ['preReq'] = {22,25,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -633,10 +633,10 @@ nodeDB.newData = {
         },
     },
     [27] = {
-        ['x'] = -90,
-        ['y'] = -145,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -85,
+        ['y'] = -137,
+        ['type'] = 4,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Revered Lower city",
@@ -657,9 +657,9 @@ nodeDB.newData = {
         },
     },
     [28] = {
-        ['x'] = -370,
-        ['y'] = -185,
-        ['type'] = 1,
+        ['x'] = -351,
+        ['y'] = -175,
+        ['type'] = 3,
         ['preReq'] = {26,8,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -681,13 +681,13 @@ nodeDB.newData = {
         },
     },
     [29] = {
-        ['x'] = -180,
-        ['y'] = -195,
+        ['x'] = -171,
+        ['y'] = -185,
         ['type'] = 1,
         ['preReq'] = {27,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
-            ['titleText'] = "shadowlabs key",
+            ['titleText'] = "HC shadowlabs key",
             ['flavorText'] = '',
             ['objectives'] = {
                 ['level'] = 1,
@@ -705,9 +705,9 @@ nodeDB.newData = {
         },
     },
     [30] = {
-        ['x'] = -285,
-        ['y'] = -225,
-        ['type'] = 1,
+        ['x'] = -270,
+        ['y'] = -213,
+        ['type'] = 3,
         ['preReq'] = {29,28,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -729,9 +729,9 @@ nodeDB.newData = {
         },
     },
     [31] = {
-        ['x'] = -360,
-        ['y'] = -260,
-        ['type'] = 1,
+        ['x'] = -342,
+        ['y'] = -247,
+        ['type'] = 8,
         ['preReq'] = {30,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -753,9 +753,9 @@ nodeDB.newData = {
         },
     },
     [32] = {
-        ['x'] = -320,
-        ['y'] = 70,
-        ['type'] = 1,
+        ['x'] = -304,
+        ['y'] = 66,
+        ['type'] = 2,
         ['preReq'] = {31,30,28,26,22,18,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -777,9 +777,9 @@ nodeDB.newData = {
         },
     },
     [33] = {
-        ['x'] = 260,
-        ['y'] = 325,
-        ['type'] = 1,
+        ['x'] = 247,
+        ['y'] = 308,
+        ['type'] = 2,
         ['preReq'] = {16,17,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -801,9 +801,9 @@ nodeDB.newData = {
         },
     },
     [34] = {
-        ['x'] = 180,
-        ['y'] = 160,
-        ['type'] = 1,
+        ['x'] = 171,
+        ['y'] = 152,
+        ['type'] = 8,
         ['preReq'] = {33,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -825,9 +825,9 @@ nodeDB.newData = {
         },
     },
     [35] = {
-        ['x'] = 100,
-        ['y'] = 140,
-        ['type'] = 1,
+        ['x'] = 95,
+        ['y'] = 133,
+        ['type'] = 8,
         ['preReq'] = {32,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -849,10 +849,10 @@ nodeDB.newData = {
         },
     },
     [36] = {
-        ['x'] = 110,
-        ['y'] = 225,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = 104,
+        ['y'] = 213,
+        ['type'] = 4,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Friendly Scale of the sands",
@@ -873,9 +873,9 @@ nodeDB.newData = {
         },
     },
     [37] = {
-        ['x'] = -160,
-        ['y'] = 225,
-        ['type'] = 1,
+        ['x'] = -152,
+        ['y'] = 213,
+        ['type'] = 2,
         ['preReq'] = {36,35,36,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -897,10 +897,10 @@ nodeDB.newData = {
         },
     },
     [38] = {
-        ['x'] = -400,
-        ['y'] = 320,
+        ['x'] = -413,
+        ['y'] = 237,
         ['type'] = 1,
-        ['preReq'] = {},
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "BT intro quest",
@@ -921,9 +921,9 @@ nodeDB.newData = {
         },
     },
     [39] = {
-        ['x'] = -420,
-        ['y'] = 230,
-        ['type'] = 1,
+        ['x'] = -365,
+        ['y'] = 308,
+        ['type'] = 3,
         ['preReq'] = {38,8,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -945,10 +945,10 @@ nodeDB.newData = {
         },
     },
     [40] = {
-        ['x'] = -310,
-        ['y'] = 310,
-        ['type'] = 1,
-        ['preReq'] = {33,},
+        ['x'] = -294,
+        ['y'] = 294,
+        ['type'] = 8,
+        ['preReq'] = {33,39,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "SSC quest",
@@ -969,10 +969,10 @@ nodeDB.newData = {
         },
     },
     [41] = {
-        ['x'] = -360,
-        ['y'] = 190,
-        ['type'] = 1,
-        ['preReq'] = {32,},
+        ['x'] = -342,
+        ['y'] = 180,
+        ['type'] = 8,
+        ['preReq'] = {32,40,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Tempest keep fragment",
@@ -993,10 +993,10 @@ nodeDB.newData = {
         },
     },
     [42] = {
-        ['x'] = -285,
-        ['y'] = 230,
-        ['type'] = 1,
-        ['preReq'] = {37,},
+        ['x'] = -270,
+        ['y'] = 218,
+        ['type'] = 8,
+        ['preReq'] = {37,41,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Hyjal Fragment",
@@ -1017,9 +1017,9 @@ nodeDB.newData = {
         },
     },
     [43] = {
-        ['x'] = -460,
-        ['y'] = 10,
-        ['type'] = 1,
+        ['x'] = -437,
+        ['y'] = 9,
+        ['type'] = 2,
         ['preReq'] = {42,41,40,39,38,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -1041,10 +1041,10 @@ nodeDB.newData = {
         },
     },
     [44] = {
-        ['x'] = -100,
-        ['y'] = 390,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -95,
+        ['y'] = 370,
+        ['type'] = 2,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Zul'Aman",
@@ -1065,10 +1065,10 @@ nodeDB.newData = {
         },
     },
     [45] = {
-        ['x'] = 100,
-        ['y'] = 390,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = 95,
+        ['y'] = 370,
+        ['type'] = 2,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Sunwell",
@@ -1089,10 +1089,10 @@ nodeDB.newData = {
         },
     },
     [46] = {
-        ['x'] = -250,
-        ['y'] = -390,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -237,
+        ['y'] = -370,
+        ['type'] = 2,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Gruuls' lair",
@@ -1113,9 +1113,9 @@ nodeDB.newData = {
         },
     },
     [47] = {
-        ['x'] = 10,
-        ['y'] = -125,
-        ['type'] = 1,
+        ['x'] = 9,
+        ['y'] = -118,
+        ['type'] = 2,
         ['preReq'] = {2,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
@@ -1137,13 +1137,373 @@ nodeDB.newData = {
         },
     },
     [48] = {
-        ['x'] = -125,
-        ['y'] = -260,
-        ['type'] = 1,
-        ['preReq'] = {},
+        ['x'] = -118,
+        ['y'] = -247,
+        ['type'] = 2,
+        ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['tooltip'] = {
             ['titleText'] = "Defeat Magtheridon",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 8,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [49] = {
+        ['x'] = 405,
+        ['y'] = 365,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Ogri'la",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [50] = {
+        ['x'] = 472,
+        ['y'] = 351,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted The Consortium",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [51] = {
+        ['x'] = 529,
+        ['y'] = 365,
+        ['type'] = 7,
+        ['preReq'] = {1,27,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Lower City",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [52] = {
+        ['x'] = 377,
+        ['y'] = 313,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Netherwing",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [53] = {
+        ['x'] = 427,
+        ['y'] = 294,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Al'dor",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [54] = {
+        ['x'] = 472,
+        ['y'] = 285,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Sporeggar",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [55] = {
+        ['x'] = 514,
+        ['y'] = 304,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Kurenei",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [56] = {
+        ['x'] = 394,
+        ['y'] = 256,
+        ['type'] = 7,
+        ['preReq'] = {1,36,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Scale of the sands",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [57] = {
+        ['x'] = 465,
+        ['y'] = 228,
+        ['type'] = 7,
+        ['preReq'] = {1,19,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Honor Hold",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [58] = {
+        ['x'] = 524,
+        ['y'] = 247,
+        ['type'] = 7,
+        ['preReq'] = {1,23,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Cenarion Expedition",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [59] = {
+        ['x'] = 427,
+        ['y'] = 199,
+        ['type'] = 7,
+        ['preReq'] = {1,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted The Violet Eye",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [60] = {
+        ['x'] = 495,
+        ['y'] = 190,
+        ['type'] = 7,
+        ['preReq'] = {1,27,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Sha'tar",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [61] = {
+        ['x'] = 323,
+        ['y'] = -408,
+        ['type'] = 7,
+        ['preReq'] = {13,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Revered Keepers of Time",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [62] = {
+        ['x'] = 209,
+        ['y'] = -408,
+        ['type'] = 7,
+        ['preReq'] = {61,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "CoT HC keys",
+            ['flavorText'] = '',
+            ['objectives'] = {
+                ['level'] = 1,
+                ['spell'] = {
+                },
+                ['item'] = {
+                },
+                ['quest'] = {
+                },
+                ['reputation'] = {
+                },
+                ['bosskill'] = {
+                },
+            },
+        },
+    },
+    [63] = {
+        ['x'] = 465,
+        ['y'] = 152,
+        ['type'] = 7,
+        ['preReq'] = {61,},
+        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['tooltip'] = {
+            ['titleText'] = "Exalted Keepers of Time",
             ['flavorText'] = '',
             ['objectives'] = {
                 ['level'] = 1,
@@ -1163,5 +1523,5 @@ nodeDB.newData = {
 }
 
 nodeDB.newIDs = {
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 
 }

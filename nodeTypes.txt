@@ -1,0 +1,14 @@
+
++--------------+----+
+|    Types     | ID |
++--------------+----+
+| Quest/other  |  1 |
+| Raid         |  2 |
+| Heroic Drop  |  3 |
+| Reputation   |  4 |
+| normal Drop  |  5 |
+| level/flying |  6 |
+| Bonus        |  7 |
+| Raid Drop    |  8 |
++--------------+----+
+
