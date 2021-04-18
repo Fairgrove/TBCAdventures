@@ -9,21 +9,24 @@ end
 
 --NAMESPACE
 -------------------------------------
-local _, core = ...; -- Namespace
+local _, core = ... -- Namespace
 local nodeDB = core.nodeDB.newData
 local nodeIDs = core.nodeDB.newIDs
 
+local clusterDB = core.clusterDB.clusters
+local clusterIds = core.clusterDB.clusterIDs
+
 --Type, Offset, Size, Color
 local nodesomething = {
-    {1, 10, 50, {0,0,1}},
-    {2, 20, 100, {1,1,0}},
-    {3, 10, 50, {0.67,0.84,0.9}},
-    {4, 10, 50, {0,1,0}},
-    {5, 10, 50, {0.5,0.5,0.5}},
-    {6, 20, 100, {1,0,0}},
-    {7, 6, 30, {0,1,0}},
-    {8, 10, 50, {1,1,0}},
-    {9, 10, 50, {1,0,0}},
+    {1, 0, 40, {0,0,1}}, --10
+    {2, 0, 70, {1,1,0}},--20
+    {3, 0, 40, {0.67,0.84,0.9}}, --10
+    {4, 0, 40, {0,1,0}}, --10
+    {5, 0, 40, {0.5,0.5,0.5}}, --10
+    {6, 0, 70, {1,0,0}},--20
+    {7, 0, 20, {0,1,0}},--6
+    {8, 0, 40, {1,1,0}},--10
+    {9, 0, 40, {1,0,0}},--10
 }
 
 --Creating UI Frame
@@ -31,7 +34,8 @@ local nodesomething = {
 local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
 UI:SetSize(1100, 900) --x, y
 UI:SetPoint("CENTER", UIParent, "CENTER")
-UI.SubFrames = {}
+UI.nodes = {}
+UI.clusters = {}
 
 UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
@@ -310,7 +314,7 @@ local function getUnlockStatus(self)
     local counter = 0
     if #self.data['preReq'] > 0 then
         for i, ID in pairs(self.data['preReq']) do
-            if getCompleteStatus(UI.SubFrames[ID]) then
+            if getCompleteStatus(UI.nodes[ID]) then
                 counter = counter + 1
             end
         end
@@ -324,8 +328,29 @@ local function getUnlockStatus(self)
     end
 end
 
+local function updateAllClusters()
+    for i, cluster in pairs(UI.clusters) do
+        for j, line in pairs(cluster.lines) do
+            if getUnlockStatus(cluster) then
+                cluster.data['rank'] = 1
+                line:SetColorTexture(0.5,0.5,0.5,1)
+                line:SetThickness(10)
+                
+                if getCompleteStatus(UI.nodes[line.pointsTo]) then
+                    line:SetColorTexture(1,0,0,1)
+                    line:SetThickness(5)
+                end
+            else
+                line:SetColorTexture(0.3,0.3,0.3,1)
+                line:SetThickness(5)
+            end
+        end
+    end
+end
+
 local function updateAllNodes()
-    for i, node in pairs(UI.SubFrames) do
+    updateAllClusters()
+    for i, node in pairs(UI.nodes) do
         
         -- updateText
         --node.text:SetText(tostring(node.data['rank']) .. "/ 1")
@@ -336,7 +361,7 @@ local function updateAllNodes()
                 -- if prereq node is compeleted make line grey
                 for k, line in pairs(node.lines) do
                     if line.pointsTo == preReqID then
-                        if getCompleteStatus(UI.SubFrames[preReqID]) then
+                        if getCompleteStatus(UI.nodes[preReqID]) then
                             line:SetColorTexture(0.5,0.5,0.5,1)
                             line:SetThickness(10)
                         else
@@ -389,17 +414,80 @@ local function showUI()
 end
 
 local function createLines(self, x, y, pointsTo)
-    local l = self:CreateLine()
+    local l = self:CreateLine(nil, 'OVERLAY')
     l.pointsTo = pointsTo
     l:SetColorTexture(0,0,1,1)
     l:SetStartPoint("CENTER",self, x, y)
-    l:SetEndPoint("CENTER",self, math.random(-100,100), math.random(-100,100))
+    l:SetEndPoint("CENTER",self, 0, 0)
     l:SetThickness(10)
+    
+    -- l:SetDrawLayer("OVERLAY", 6)
+    -- print(l:GetDrawLayer())
     return l
 end
 
+local function calcPoint(diameter, circleX, circleY, pointX, pointY)
+    local position = {0,0}
+    position[1] = circleX + (diameter/2) * ((pointX - circleX)/(math.sqrt((pointX-circleX)^2+(pointY-circleY)^2)))
+    position[2] = circleY + (diameter/2) * ((pointY - circleY)/(math.sqrt((pointX-circleX)^2+(pointY-circleY)^2)))
+
+    return position
+end
+
+local function createClusterFrame(self, cluster)
+    local f = CreateFrame("Frame", "$parent_NODE"..#self.clusters+1, self)
+
+    f.data = {
+        ['rank'] = 0,
+        ['preReq'] = cluster['preReq'],
+    }
+
+    --calculate te position of the cluster my getting the centroid of the node's positions
+    local position = {0,0}
+    for i, preReq in pairs(cluster['preReq']) do
+        local _, _, _, xOfs, yOfs = UI.nodes[preReq]:GetPoint()
+        position[1] = position[1] + xOfs
+        -- print(position)
+        position[2] = position[2] + yOfs
+
+    end
+    position[1] = (1/#cluster['preReq']) * position[1]
+    position[2] = (1/#cluster['preReq']) * position[2]
+
+    f:SetSize(cluster['size'], cluster['size'])
+    f:SetPoint("CENTER", position[1], position[2])
+
+    f.lines = {}
+    for i, pointsTo in pairs(cluster['pointsTo']) do
+        --calculate the closest point on circle to node
+        local _, _, _, xOfs, yOfs = UI.nodes[pointsTo]:GetPoint()
+        local point = calcPoint(cluster['size'], position[1], position[2], xOfs, yOfs)
+
+        tinsert(f.lines, createLines(self, point[1], point[2], pointsTo))
+
+    end
+
+    -- f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    -- f.Icon:SetTexture(cluster['icon'])
+    -- f.Icon:SetTexCoord(.1, .9, .1, .9)
+    -- f.Icon:SetAllPoints()
+    -- f.Icon:SetVertexColor(1, 1, 1, 1)
+
+    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
+    f.Ring:SetAllPoints()
+    f.Ring:SetTexture([[Interface\Addons\TBCAdventures\textures\ring]]) --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
+    f.Ring:SetVertexColor(1, 1, 1, 1)
+
+    f.mask = f:CreateMaskTexture()
+    f.mask:SetAllPoints()
+    f.mask:SetTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+    f.Ring:AddMaskTexture(f.mask)
+
+    return f
+end
+
 local function CreateSubFrame(self, node)
-    local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
+    local f = CreateFrame("Button", "$parent_NODE"..#self.nodes+1, self)
 
     f.data = {
         ['rank'] = 0,
@@ -425,7 +513,8 @@ local function CreateSubFrame(self, node)
     end
     
     f:SetSize(nodesomething[node['type']][3], nodesomething[node['type']][3])
-
+    f:SetPoint("CENTER", node['x'], node['y'])
+    
     f.lines = {}
     for i, preReqID in pairs(node['preReq']) do
         --check if preReqID is in exception array
@@ -450,24 +539,30 @@ local function CreateSubFrame(self, node)
     -- create subframes of icon
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
     f.Icon:SetTexture(node['icon'])
-    f.Icon:SetPoint("TOPLEFT", f ,"TOPLEFT", nodesomething[node['type']][2], -nodesomething[node['type']][2])  
-    f.Icon:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -nodesomething[node['type']][2], nodesomething[node['type']][2])
+    f.Icon:SetTexCoord(.1, .9, .1, .9)
+    f.Icon:SetAllPoints()
     f.Icon:SetVertexColor(1, 1, 1, 1)
+    --f.Icon:SetMask("Interface/ChatFrame/UI-ChatIcon-HotS")
+    --SetPortraitToTexture(f.Icon, node['icon'])
+
+    f.mask = f:CreateMaskTexture()
+    f.mask:SetAllPoints()
+    f.mask:SetTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMask", "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+    f.Icon:AddMaskTexture(f.mask)
 
     f.Glow = f:CreateTexture(nil, "ARTWORK", nil, 5)
     f.Glow:SetTexture("Interface/GLUES/Models/UI_SCOURGE/T_VFX_Glow01_64")
-    f.Glow:SetPoint("TOPLEFT", f ,"TOPLEFT", nodesomething[node['type']][2], -nodesomething[node['type']][2])
-    f.Glow:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", -nodesomething[node['type']][2], nodesomething[node['type']][2]) 
+    f.Glow:SetAllPoints()
     f.Glow:SetVertexColor(0, 0, 0, 0)
 
     f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
     f.Ring:SetAllPoints()
-    f.Ring:SetTexture("Interface/Artifacts/Artifacts-PerkRing-Final-Mask")
+    f.Ring:SetTexture([[Interface\Addons\TBCAdventures\textures\ring]]) --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
     f.Ring:SetVertexColor(f.data['ringColor'][1], f.data['ringColor'][2], f.data['ringColor'][3],1)
     
     f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 4)
     f.DesaturateMask:SetAllPoints()
-    f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/Masks/CircleMaskScalable"
+    f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle"
     f.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
 
     f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)    
@@ -480,8 +575,6 @@ local function CreateSubFrame(self, node)
     -- f.text:SetPoint("BOTTOM", 0, 0)
     -- f.text:SetText(f.data['text'])
 
-    f:SetPoint("CENTER", node['x'], node['y'])
-    
     --On mouseover
     f:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", -25, 25);
@@ -515,17 +608,24 @@ end
 --Creating Nodes
 -------------------------------------
 for i, v in pairs(nodeIDs) do
-    tinsert(UI.SubFrames, CreateSubFrame(UI, nodeDB[v]))
+    tinsert(UI.nodes, CreateSubFrame(UI, nodeDB[v]))
+end
+
+for i, v in pairs(clusterIds) do
+    tinsert(UI.clusters, createClusterFrame(UI, clusterDB[v]))
 end
 
 --placing lines correctly
-for i, node in pairs(UI.SubFrames) do
+for i, node in pairs(UI.nodes) do
     for j, line in pairs(node.lines) do
-        --_, _, _, xOfs, yOfs = UI.SubFrames[preReqID]:GetPoint()
-        --node.lines[]
+        local _, relativeTo, _, xOfs, yOfs = UI.nodes[line.pointsTo]:GetPoint()
+        line:SetEndPoint("CENTER",relativeTo:GetName(), xOfs, yOfs)
+    end
+end
 
-        print(line.pointsTo)
-        local _, relativeTo, _, xOfs, yOfs = UI.SubFrames[line.pointsTo]:GetPoint()
+for i, cluster in pairs(UI.clusters) do
+    for j, line in pairs(cluster.lines) do
+        local _, relativeTo, _, xOfs, yOfs = UI.nodes[line.pointsTo]:GetPoint()
         line:SetEndPoint("CENTER",relativeTo:GetName(), xOfs, yOfs)
     end
 end
@@ -537,8 +637,8 @@ function SlashCmdList.SHOWTBCUI(msg, editBox) -- 4.
     showUI()
 end
 function SlashCmdList.CLEARTBCDATA(msg, editBox) -- 4.
-    for i, v in pairs(UI.SubFrames) do
-        UI.SubFrames[i].data['rank'] = 0
+    for i, v in pairs(UI.nodes) do
+        UI.nodes[i].data['rank'] = 0
     end
    
 end
@@ -580,12 +680,12 @@ SavedVariables:SetScript("OnEvent", function(self, event, arg1)
         if NODE_DATA == nil then
             NODE_DATA = {}
         end  
-        debugPrinter(#UI.SubFrames)
-        for i, v in pairs(UI.SubFrames) do
+        debugPrinter(#UI.nodes)
+        for i, v in pairs(UI.nodes) do
             if NODE_DATA[i] == nil then
-                UI.SubFrames[i].data['rank'] = 0
+                UI.nodes[i].data['rank'] = 0
             else
-                UI.SubFrames[i].data['rank'] = NODE_DATA[i]
+                UI.nodes[i].data['rank'] = NODE_DATA[i]
             end  
         end
         
@@ -595,8 +695,8 @@ SavedVariables:SetScript("OnEvent", function(self, event, arg1)
     end
     if event == "PLAYER_LOGOUT" then
         NODE_DATA = {}
-        for i, v in pairs(UI.SubFrames) do
-            NODE_DATA[#NODE_DATA + 1] = UI.SubFrames[i].data['rank']
+        for i, v in pairs(UI.nodes) do
+            NODE_DATA[#NODE_DATA + 1] = UI.nodes[i].data['rank']
         end
     end
 end)
