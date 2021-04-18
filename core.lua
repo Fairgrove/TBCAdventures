@@ -330,6 +330,31 @@ local function updateAllNodes()
         -- updateText
         --node.text:SetText(tostring(node.data['rank']) .. "/ 1")
         
+        if #node.data['preReq'] > 0 then
+            --if i am completed make all  my lines red
+            for j, preReqID in pairs(node.data['preReq']) do
+                -- if prereq node is compeleted make line grey
+                for k, line in pairs(node.lines) do
+                    if line.pointsTo == preReqID then
+                        if getCompleteStatus(UI.SubFrames[preReqID]) then
+                            line:SetColorTexture(0.5,0.5,0.5,1)
+                            line:SetThickness(10)
+                        else
+                        -- elseif preReq node is not completed make line black
+                            line:SetColorTexture(0.3,0.3,0.3,1)
+                            line:SetThickness(5)
+                        end
+                    end
+                end   
+            end
+            if getCompleteStatus(node) then
+                for j, line in pairs(node.lines) do
+                    line:SetColorTexture(1,0,0,1)
+                    line:SetThickness(5)
+                end
+            end
+        end
+
         -- updateTexture
         if getUnlockStatus(node) then
             node.Ring:SetVertexColor(node.data['ringColor'][1], node.data['ringColor'][2], node.data['ringColor'][3],1)
@@ -363,6 +388,16 @@ local function showUI()
     UI:Show()
 end
 
+local function createLines(self, x, y, pointsTo)
+    local l = self:CreateLine()
+    l.pointsTo = pointsTo
+    l:SetColorTexture(0,0,1,1)
+    l:SetStartPoint("CENTER",self, x, y)
+    l:SetEndPoint("CENTER",self, math.random(-100,100), math.random(-100,100))
+    l:SetThickness(10)
+    return l
+end
+
 local function CreateSubFrame(self, node)
     local f = CreateFrame("Button", "$parent_NODE"..#self.SubFrames+1, self)
 
@@ -390,6 +425,27 @@ local function CreateSubFrame(self, node)
     end
     
     f:SetSize(nodesomething[node['type']][3], nodesomething[node['type']][3])
+
+    f.lines = {}
+    for i, preReqID in pairs(node['preReq']) do
+        --check if preReqID is in exception array
+        local drawLine = true
+        if #node['lineExcept'] > 0 then
+            for j, lineExceptID in pairs(node['lineExcept']) do
+                if preReqID == lineExceptID then
+                    drawLine = false
+                end
+            end
+        end
+
+        if drawLine then
+            if (node['type'] == 4 and preReqID == 1) or (node['type'] == 7) then
+                
+            else 
+                tinsert(f.lines, createLines(self, node['x'], node['y'], preReqID))
+            end
+        end
+    end
 
     -- create subframes of icon
     f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 2)
@@ -462,6 +518,18 @@ for i, v in pairs(nodeIDs) do
     tinsert(UI.SubFrames, CreateSubFrame(UI, nodeDB[v]))
 end
 
+--placing lines correctly
+for i, node in pairs(UI.SubFrames) do
+    for j, line in pairs(node.lines) do
+        --_, _, _, xOfs, yOfs = UI.SubFrames[preReqID]:GetPoint()
+        --node.lines[]
+
+        print(line.pointsTo)
+        local _, relativeTo, _, xOfs, yOfs = UI.SubFrames[line.pointsTo]:GetPoint()
+        line:SetEndPoint("CENTER",relativeTo:GetName(), xOfs, yOfs)
+    end
+end
+
 --Commands
 -------------------------------------
 SLASH_SHOWTBCUI1, SLASH_CLEARTBCDATA1 = '/tbcShow', "/TBCCLEAR"
@@ -492,6 +560,14 @@ eventTrace:RegisterEvent("PLAYER_LEVEL_UP")
 eventTrace:RegisterEvent("LEARNED_SPELL_IN_TAB")
 eventTrace:SetScript("OnEvent", OnEvent)
 
+-- local fra = CreateFrame("Frame")
+-- fra:SetPoint("CENTER", 0, 0)
+-- fra:SetSize(10,10)
+-- local lin = CreateLine()
+-- lin:SetColorTexture(1,0,0,1)
+-- lin:SetStartPoint("TOPLEFT",10,10)
+-- lin:SetEndPoint("BOTTOMRIGHT",10,10)
+-- fra:Show()
 
 -- Loading Saved Variables
 -------------------------------------
