@@ -24,18 +24,23 @@ local nodesomething = {
     {4, 0, 40, {0,1,0}}, --10
     {5, 0, 40, {0.5,0.5,0.5}}, --10
     {6, 0, 70, {1,0,0}},--20
-    {7, 0, 20, {0,1,0}},--6
+    {7, 0, 40, {0,1,0}},--6
     {8, 0, 40, {1,1,0}},--10
     {9, 0, 40, {1,0,0}},--10
 }
 
 --Creating UI Frame
 -------------------------------------
-local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplateWithInset")
+local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BaseBasicFrameTemplate")
 UI:SetSize(1100, 900) --x, y
 UI:SetPoint("CENTER", UIParent, "CENTER")
 UI.nodes = {}
 UI.clusters = {}
+
+UI.background = UI:CreateTexture(nil, "BACKGROUND", nil, -1)
+UI.background:SetTexture([[Interface\Addons\TBCAdventures\textures\background3]]) -- [[Interface\Addons\TBCAdventures\textures\background]] "Interface/icons/ability_warrior_savageblow"
+UI.background:SetTexCoord(0, 1, 0, 0.8)
+UI.background:SetAllPoints()
 
 UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
@@ -455,25 +460,19 @@ local function createClusterFrame(self, cluster)
     position[2] = (1/#cluster['preReq']) * position[2]
 
     f:SetSize(cluster['size'], cluster['size'])
-    f:SetPoint("CENTER", position[1], position[2])
+    f:SetPoint("CENTER", cluster['x'], cluster['y'])
 
     f.lines = {}
     for i, pointsTo in pairs(cluster['pointsTo']) do
         --calculate the closest point on circle to node
         local _, _, _, xOfs, yOfs = UI.nodes[pointsTo]:GetPoint()
-        local point = calcPoint(cluster['size'], position[1], position[2], xOfs, yOfs)
+        local point = calcPoint(cluster['size'], cluster['x'], cluster['y'], xOfs, yOfs)
 
         tinsert(f.lines, createLines(self, point[1], point[2], pointsTo))
 
     end
 
-    -- f.Icon = f:CreateTexture(nil, "ARTWORK", nil, 1)
-    -- f.Icon:SetTexture(cluster['icon'])
-    -- f.Icon:SetTexCoord(.1, .9, .1, .9)
-    -- f.Icon:SetAllPoints()
-    -- f.Icon:SetVertexColor(1, 1, 1, 1)
-
-    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
+    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 0)
     f.Ring:SetAllPoints()
     f.Ring:SetTexture([[Interface\Addons\TBCAdventures\textures\ring]]) --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
     f.Ring:SetVertexColor(1, 1, 1, 1)
