@@ -15,7 +15,7 @@ nodeDB.newData = {
             ['titleText'] = "Start your Adventure!",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 0,
+                ['level'] = 70,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -194,6 +194,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30634', 1},
                 },
                 ['quest'] = {
                 },
@@ -221,6 +222,7 @@ nodeDB.newData = {
                 ['item'] = {
                 },
                 ['quest'] = {
+                    9824,9825,9826,9829,
                 },
                 ['reputation'] = {
                 },
@@ -519,6 +521,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30622', 1},
                 },
                 ['quest'] = {
                 },
@@ -594,6 +597,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30623', 1},
                 },
                 ['quest'] = {
                 },
@@ -619,6 +623,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30623', 1},
                 },
                 ['quest'] = {
                 },
@@ -719,6 +724,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30633', 1},
                 },
                 ['quest'] = {
                 },
@@ -1544,6 +1550,7 @@ nodeDB.newData = {
                 ['spell'] = {
                 },
                 ['item'] = {
+                    {'30635', 1},
                 },
                 ['quest'] = {
                 },

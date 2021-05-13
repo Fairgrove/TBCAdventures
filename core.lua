@@ -115,14 +115,13 @@ local function genQuestText(questIDs)
     if #questIDs > 0 then
         str ="Quest Requirements:\n"
     end
-
     for i in pairs(questIDs) do
-        if IsQuestFlaggedCompleted(questIDs[i]) then
+        if C_QuestLog.IsQuestFlaggedCompleted(questIDs[i]) then
             str = str .. "|cffffffff - |r|cff90EE90" .. C_QuestLog.GetQuestInfo(questIDs[i]) .. "|r\n"
         else
             str = str .. "|cffffffff - " .. C_QuestLog.GetQuestInfo(questIDs[i]) .. "|r\n"
         end
-    end
+    end --C_QuestLog.GetQuestInfo(questIDs[i])
     return str
 end
 
@@ -232,7 +231,7 @@ local function questCriteria(questList)
     if #questList > 0 then
         local counter = 0
         for i, v in pairs(questList) do
-            if IsQuestFlaggedCompleted(v) then
+            if C_QuestLog.IsQuestFlaggedCompleted(tonumber(v)) then
                 counter = counter + 1
             end
         end
@@ -607,7 +606,7 @@ local function CreateSubFrame(self, node)
 
     --On mouseover
     f:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", -25, 25);
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0);
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
         f.Glow:SetVertexColor(1, 1, 1, 0.7)
@@ -702,16 +701,52 @@ eventTrace:SetScript("OnEvent", OnEvent)
 
 -- Loading Saved Variables
 -------------------------------------
+
+local function loadQuestData(ID)
+    C_QuestLog.GetQuestInfo(ID)
+end
+
+
+function QuestUtils_GetQuestName(questID)
+	-- TODO: Make unified API for this?
+	return C_TaskQuest.GetQuestInfoByQuestID(questID) or C_QuestLog.GetTitleForQuestID(questID) or "";
+end
+
+
+local function loadItemData(ID)
+    local item = Item:CreateFromItemID(tonumber(ID))
+    local itemName = ""
+    item:ContinueOnItemLoad(function()
+        itemName = item:GetItemName()
+    end)
+end
+
+local function loadIDdata()
+    for i, v in pairs(nodeIDs) do
+        --nodeDB[v]['tooltip']['objectives']['reputation']
+        --nodeDB[v]['tooltip']['objectives']['level']
+        --nodeDB[v]['tooltip']['objectives']['spell']
+
+        for j, ID in pairs(nodeDB[v]['tooltip']['objectives']['item']) do
+            loadItemData(ID[1])
+        end
+
+        for j, ID in pairs(nodeDB[v]['tooltip']['objectives']['quest']) do
+            loadQuestData(ID)
+        end
+    end
+end
+
 local SavedVariables = CreateFrame("Frame")
 SavedVariables:RegisterEvent("PLAYER_LOGOUT")
 SavedVariables:RegisterEvent("ADDON_LOADED")
 SavedVariables:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == "TBCAdventures" then
-
+        loadIDdata()
         if NODE_DATA == nil then
             NODE_DATA = {}
         end
-        debugPrinter(#UI.nodes)
+        --debugPrinter(#UI.nodes)
         for i, v in pairs(UI.nodes) do
             if NODE_DATA[i] == nil then
                 UI.nodes[i].data['rank'] = 0
