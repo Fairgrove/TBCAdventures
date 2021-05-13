@@ -18,29 +18,29 @@ local clusterIds = core.clusterDB.clusterIDs
 
 --Type, Offset, Size, Color
 local nodesomething = {
-    {1, 0, 40, {0,0,1}}, --10
-    {2, 0, 70, {1,1,0}},--20
-    {3, 0, 40, {0.67,0.84,0.9}}, --10
-    {4, 0, 40, {0,1,0}}, --10
-    {5, 0, 40, {0.5,0.5,0.5}}, --10
-    {6, 0, 70, {1,0,0}},--20
-    {7, 0, 40, {0,1,0}},--6
-    {8, 0, 40, {1,1,0}},--10
-    {9, 0, 40, {1,0,0}},--10
+    {1, 0, 40, {1,1,1}}, --item
+    {2, 0, 70, {1,1,0}},-- Raid
+    {3, 0, 40, {0.2,0.2,1}}, -- Dungeon
+    {4, 0, 40, {0,1,0.5}}, --Reputation
+    {5, 0, 40, {0.5,0.5,0.5}}, -- Quest
+    {6, 0, 70, {1,0,0}}, -- level 70
+    {7, 0, 40, {0,1,0.5}}, -- Bonus Rep
+    {8, 0, 40, {1,1,0}}, --Raid
+    {9, 0, 40, {1,0,0}},-- Flying
 }
 
 --Creating UI Frame
 -------------------------------------
-local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BaseBasicFrameTemplate")
+local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplate")
 UI:SetSize(1100, 900) --x, y
 UI:SetPoint("CENTER", UIParent, "CENTER")
 UI.nodes = {}
 UI.clusters = {}
 
-UI.background = UI:CreateTexture(nil, "BACKGROUND", nil, -1)
-UI.background:SetTexture([[Interface\Addons\TBCAdventures\textures\background3]]) -- [[Interface\Addons\TBCAdventures\textures\background]] "Interface/icons/ability_warrior_savageblow"
-UI.background:SetTexCoord(0, 1, 0, 0.8)
-UI.background:SetAllPoints()
+-- UI.background = UI:CreateTexture(nil, "BACKGROUND", nil, -1)
+-- UI.background:SetTexture([[Interface\Addons\TBCAdventures\textures\background3]]) -- [[Interface\Addons\TBCAdventures\textures\background]] "Interface/icons/ability_warrior_savageblow"
+-- UI.background:SetTexCoord(0, 1, 0, 0.8)
+-- UI.background:SetAllPoints()
 
 UI.title = UI:CreateFontString(nil, "OVERLAY")
 UI.title:SetFontObject("GameFontHighlight")
@@ -54,9 +54,14 @@ local function genItemText(items)
     if #items > 0 then
         str ="Items Needed:\n"
     end
-         
+
     for i in pairs(items) do
-        local itemName = items[i][1]
+        local item = Item:CreateFromItemID(tonumber(items[i][1]))
+        local itemName = ""
+        item:ContinueOnItemLoad(function()
+        	itemName = item:GetItemName()
+        end)
+
         local itemCount = GetItemCount(items[i][1])
         local itemReq = items[i][2]
         if itemCount >= itemReq then
@@ -95,7 +100,7 @@ local function genSpellText(spellIDs)
 
     for i in pairs(spellIDs) do
         local spell = IsPlayerSpell(spellIDs[i])
-        
+
         if spell then
             str = str .. "|cffffffff - |r|cff90EE90" .. GetSpellInfo(spellIDs[i]) .. "|r\n"
         else
@@ -155,24 +160,41 @@ local function createTooltip(tooltipData)
         if key == 'item' then
             str = str .. genItemText(objective)
         end
-        
+
         if key == 'quest' then
             str = str .. genQuestText(objective)
         end
-        
+
         if key == 'reputation' then
             str = str .. genRepText(objective)
         end
 
-        
+
 
         --NYI
         -- if key == 'bosskill' then
         --     str = str .. "Bosses Killed:\n"
-        -- end  
+        -- end
     end
-    
+
     return str
+end
+
+local function shakeSreen()
+    local SHAKE_DURATION = 0.1
+    local SHAKE_FREQUENCY = 0.001
+    local SHAKE_DELAY = 0.1
+    local MAGNITUDE = 5
+
+    local SHAKE = {}
+	for i = 1, math.ceil(SHAKE_DURATION / SHAKE_FREQUENCY) do
+		local xVariation, yVariation = RandomFloatInRange(-MAGNITUDE, MAGNITUDE), RandomFloatInRange(-MAGNITUDE, MAGNITUDE)
+		SHAKE[i] = { x = xVariation, y = yVariation }
+	end
+
+    C_Timer.After(SHAKE_DELAY, function()
+        ShakeFrame(UIParent, SHAKE, SHAKE_DURATION, SHAKE_FREQUENCY)
+    end)
 end
 
 local function levelCriteria(level)
@@ -219,9 +241,9 @@ local function questCriteria(questList)
         else
             return 0
         end
-    else 
+    else
         return 0
-    end  
+    end
 end
 
 local function itemCriteria(itemList)
@@ -240,7 +262,7 @@ local function itemCriteria(itemList)
         else
             return 0
         end
-    else 
+    else
         return 0
     end
 end
@@ -252,7 +274,7 @@ local function OLD_repCriteria(repList)
         for i in pairs(repList) do
             local name, _, standing= GetFactionInfoByID(repList[i][1])
             local repReq = repList[i][2]
-            
+
             if standing >= 4 then
                 counter = (repReq - neutral) - (repReq - standing)
             else
@@ -266,12 +288,16 @@ local function OLD_repCriteria(repList)
 end
 
 local function repCriteria(repList)
+    --chekc FACTION
+    --check if scryer or aldor
+    --have horde/ally rep (mag'har/thrallmar  --  Honor Hold/Kurenei)
+    --same for aldor/scryer
     if #repList > 0 then
         local counter = 0
         for i in pairs(repList) do
             local name, _, standing= GetFactionInfoByID(repList[i][1])
             local repReq = repList[i][2]
-            
+
             if standing >= repReq then
                 counter = counter + 1
             end
@@ -287,7 +313,7 @@ local function getRanks(criteria)
     if #criteria['reputation'] > 0 then
         counter = counter + 1
     end
-    
+
     if criteria['level'] > 0 then
         counter = counter + 1
     end
@@ -299,11 +325,11 @@ local function getRanks(criteria)
     if #criteria['item'] > 0 then
         counter = counter + 1
     end
-    
+
     if #criteria['quest'] > 0 then
         counter = counter + 1
     end
-    
+
     return counter
 end
 
@@ -325,10 +351,10 @@ local function getUnlockStatus(self)
         end
         if counter >= #self.data['preReq'] then
             return true
-        else 
+        else
             return false
         end
-    else 
+    else
         return true
     end
 end
@@ -340,7 +366,7 @@ local function updateAllClusters()
                 cluster.data['rank'] = 1
                 line:SetColorTexture(0.5,0.5,0.5,1)
                 line:SetThickness(10)
-                
+
                 if getCompleteStatus(UI.nodes[line.pointsTo]) then
                     line:SetColorTexture(1,0,0,1)
                     line:SetThickness(5)
@@ -356,10 +382,10 @@ end
 local function updateAllNodes()
     updateAllClusters()
     for i, node in pairs(UI.nodes) do
-        
+
         -- updateText
         --node.text:SetText(tostring(node.data['rank']) .. "/ 1")
-        
+
         if #node.data['preReq'] > 0 then
             --if i am completed make all  my lines red
             for j, preReqID in pairs(node.data['preReq']) do
@@ -367,7 +393,7 @@ local function updateAllNodes()
                 for k, line in pairs(node.lines) do
                     if line.pointsTo == preReqID then
                         if getCompleteStatus(UI.nodes[preReqID]) then
-                            line:SetColorTexture(0.5,0.5,0.5,1)
+                            line:SetColorTexture(1,0.5,0.5,1)
                             line:SetThickness(10)
                         else
                         -- elseif preReq node is not completed make line black
@@ -375,7 +401,7 @@ local function updateAllNodes()
                             line:SetThickness(5)
                         end
                     end
-                end   
+                end
             end
             if getCompleteStatus(node) then
                 for j, line in pairs(node.lines) do
@@ -391,9 +417,9 @@ local function updateAllNodes()
             if node:availableRanks() and node.data['rank'] == 0 then
                 node.Available:Show()
                 node.DesaturateMask:Hide()
-            else 
+            else
                 node.Available:Hide()
-                node.DesaturateMask:SetVertexColor(1, 1, 1, 0.4)
+                node.DesaturateMask:SetVertexColor(0, 0, 0, 0.6)
             end
 
             if node.data['rank'] == 1 then
@@ -401,12 +427,12 @@ local function updateAllNodes()
             end
 
             --node.text:Show()
-            
-        else 
+
+        else
             node.Available:Hide()
             node.DesaturateMask:Show()
             node.Ring:SetVertexColor(0,0,0,1)
-            node.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
+            node.DesaturateMask:SetVertexColor(0, 0, 0, 0.6)
             --node.text:Hide()
         end
 
@@ -425,7 +451,7 @@ local function createLines(self, x, y, pointsTo)
     l:SetStartPoint("CENTER",self, x, y)
     l:SetEndPoint("CENTER",self, 0, 0)
     l:SetThickness(10)
-    
+
     -- l:SetDrawLayer("OVERLAY", 6)
     -- print(l:GetDrawLayer())
     return l
@@ -474,7 +500,7 @@ local function createClusterFrame(self, cluster)
 
     f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 0)
     f.Ring:SetAllPoints()
-    f.Ring:SetTexture([[Interface\Addons\TBCAdventures\textures\ring]]) --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
+    f.Ring:SetTexture("interface/Buttons/WHITE8X8") --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
     f.Ring:SetVertexColor(1, 1, 1, 1)
 
     f.mask = f:CreateMaskTexture()
@@ -495,7 +521,7 @@ local function CreateSubFrame(self, node)
         ['preReq'] = node['preReq'],
         ['ringColor'] = {nodesomething[node['type']][4][1], nodesomething[node['type']][4][2], nodesomething[node['type']][4][3]}
     }
-    
+
     f.availableRanks = function (self)
         local a = repCriteria(node['tooltip']['objectives']['reputation'])
         local b = itemCriteria(node['tooltip']['objectives']['item'])
@@ -510,10 +536,10 @@ local function CreateSubFrame(self, node)
             return false
         end
     end
-    
+
     f:SetSize(nodesomething[node['type']][3], nodesomething[node['type']][3])
     f:SetPoint("CENTER", node['x'], node['y'])
-    
+
     f.lines = {}
     for i, preReqID in pairs(node['preReq']) do
         --check if preReqID is in exception array
@@ -528,8 +554,8 @@ local function CreateSubFrame(self, node)
 
         if drawLine then
             if (node['type'] == 4 and preReqID == 1) or (node['type'] == 7) then
-                
-            else 
+
+            else
                 tinsert(f.lines, createLines(self, node['x'], node['y'], preReqID))
             end
         end
@@ -554,19 +580,24 @@ local function CreateSubFrame(self, node)
     f.Glow:SetAllPoints()
     f.Glow:SetVertexColor(0, 0, 0, 0)
 
-    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 3)
-    f.Ring:SetAllPoints()
-    f.Ring:SetTexture([[Interface\Addons\TBCAdventures\textures\ring]]) --"Interface/Artifacts/Artifacts-PerkRing-Final-Mask"
+    ringScale = nodesomething[node['type']][3] * 0.3
+    f.Ring = f:CreateTexture(nil, "ARTWORK", nil, 4)
+    f.Ring:SetPoint("TOPLEFT", f ,"TOPLEFT", -ringScale, ringScale)
+    f.Ring:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", ringScale, -ringScale)
+    f.Ring:SetTexture("Interface/Artifacts/Artifacts-PerkRing-Final-Mask") -- [[Interface\Addons\TBCAdventures\textures\ring]]
     f.Ring:SetVertexColor(f.data['ringColor'][1], f.data['ringColor'][2], f.data['ringColor'][3],1)
-    
-    f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 4)
-    f.DesaturateMask:SetAllPoints()
-    f.DesaturateMask:SetTexture("Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle") --"Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle"
-    f.DesaturateMask:SetVertexColor(1, 1, 1, 0.8)
 
-    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)    
-    f.Available:SetAllPoints()
-    f.Available:SetTexture("Interface/AddOns/TBCAdventures/textures/Untitled.png")
+    f.DesaturateMask = f:CreateTexture(nil, "ARTWORK", nil, 3)
+    f.DesaturateMask:SetAllPoints()
+    f.DesaturateMask:SetTexture("interface/Buttons/WHITE8X8") --"Interface/GLUES/Models/UI_PandarenCharacterSelect/gradient5Circle"
+    f.DesaturateMask:SetVertexColor(0.5, 0.5, 0.5, 0.4)
+    f.DesaturateMask:AddMaskTexture(f.mask)
+
+    availScale = nodesomething[node['type']][3] * 0.8
+    f.Available = f:CreateTexture(nil, "ARTWORK", nil, 1)
+    f.Available:SetPoint("TOPLEFT", f ,"TOPLEFT", -availScale, availScale)
+    f.Available:SetPoint("BOTTOMRIGHT", f ,"BOTTOMRIGHT", availScale, -availScale)
+    f.Available:SetTexture("Interface/GLUES/Models/UI_Draenei/GenericGlow64")
     f.Available:SetVertexColor(1, 1, 1, 1)
 
     -- f.text = f:CreateFontString(nil, "OVERLAY")
@@ -580,27 +611,28 @@ local function CreateSubFrame(self, node)
         GameTooltip:SetText(createTooltip(node['tooltip']))
         GameTooltip:Show()
         f.Glow:SetVertexColor(1, 1, 1, 0.7)
-        
+
     end)
-    
+
     --On Mouseover leave
     f:SetScript("OnLeave", function(self)
         f.Glow:SetVertexColor(0, 0, 0, 0)
         GameTooltip:Hide()
     end)
-    
+
     --On Click
     f:SetScript("OnClick", function(self)
         if getUnlockStatus(f) then
             if f.availableRanks() then
                 if f.data['rank'] < 1 then
                     f.data['rank'] = 1
+                    shakeSreen()
                     updateAllNodes()
                 end
             end
         end
     end)
-    
+
     return f
 end
 
@@ -639,7 +671,7 @@ function SlashCmdList.CLEARTBCDATA(msg, editBox) -- 4.
     for i, v in pairs(UI.nodes) do
         UI.nodes[i].data['rank'] = 0
     end
-   
+
 end
 
 
@@ -675,19 +707,19 @@ SavedVariables:RegisterEvent("PLAYER_LOGOUT")
 SavedVariables:RegisterEvent("ADDON_LOADED")
 SavedVariables:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == "TBCAdventures" then
-        
+
         if NODE_DATA == nil then
             NODE_DATA = {}
-        end  
+        end
         debugPrinter(#UI.nodes)
         for i, v in pairs(UI.nodes) do
             if NODE_DATA[i] == nil then
                 UI.nodes[i].data['rank'] = 0
             else
                 UI.nodes[i].data['rank'] = NODE_DATA[i]
-            end  
+            end
         end
-        
+
         print(arg1 .. " Loaded")
 
         UI:Hide()

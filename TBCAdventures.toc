@@ -1,9 +1,9 @@
 ## Interface: 90005
-## Title: Achievement
+## Title: TBC Adventure Guide
 ## Author: Terranite / Fagerlund
-## Version: 1.0
+## Version: alpha 1.0
 ## SavedVariablesPerCharacter: NODE_DATA
-## Notes: a
+## Notes: Tracks and displays your attunement adventures throughout The Burning Crusade
 
 clusterDB.lua
 nodeDB.lua

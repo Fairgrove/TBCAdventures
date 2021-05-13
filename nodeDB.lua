@@ -15,7 +15,7 @@ nodeDB.newData = {
             ['titleText'] = "Start your Adventure!",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -40,9 +40,8 @@ nodeDB.newData = {
             ['titleText'] = "Learn Flying",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
-                    1752,
                 },
                 ['item'] = {
                 },
@@ -58,7 +57,7 @@ nodeDB.newData = {
     [3] = {
         ['x'] = -264,
         ['y'] = -151,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {65,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {65,},
@@ -66,11 +65,10 @@ nodeDB.newData = {
             ['titleText'] = "Normal Mechanar",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
-                    {'Hearthstone', 1},
                 },
                 ['quest'] = {
                 },
@@ -84,7 +82,7 @@ nodeDB.newData = {
     [4] = {
         ['x'] = -306,
         ['y'] = -73,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {65,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {65,},
@@ -92,7 +90,7 @@ nodeDB.newData = {
             ['titleText'] = "Normal Botanica",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -100,7 +98,6 @@ nodeDB.newData = {
                 ['quest'] = {
                 },
                 ['reputation'] = {
-                    {69, 5},
                 },
                 ['bosskill'] = {
                 },
@@ -118,13 +115,12 @@ nodeDB.newData = {
             ['titleText'] = "arcatraz normal key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
                 },
                 ['quest'] = {
-                    456,
                 },
                 ['reputation'] = {
                 },
@@ -136,7 +132,7 @@ nodeDB.newData = {
     [6] = {
         ['x'] = -140,
         ['y'] = -87,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {5,9,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {9,},
@@ -144,7 +140,7 @@ nodeDB.newData = {
             ['titleText'] = "Arcatraz key fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -169,7 +165,7 @@ nodeDB.newData = {
             ['titleText'] = "Revered Sha'tar",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -186,15 +182,15 @@ nodeDB.newData = {
     [8] = {
         ['x'] = -158,
         ['y'] = -6,
-        ['type'] = 5,
+        ['type'] = 1,
         ['preReq'] = {7,5,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_09",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "Arcatraz HC key",
+            ['titleText'] = "Gain Access to Heroic Tempest Keep Dungeons",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -211,7 +207,7 @@ nodeDB.newData = {
     [9] = {
         ['x'] = -172,
         ['y'] = -161,
-        ['type'] = 1,
+        ['type'] = 5,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {},
@@ -219,7 +215,7 @@ nodeDB.newData = {
             ['titleText'] = "kara into quest",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -236,7 +232,7 @@ nodeDB.newData = {
     [10] = {
         ['x'] = -37,
         ['y'] = -161,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {9,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {9,},
@@ -244,7 +240,7 @@ nodeDB.newData = {
             ['titleText'] = "streamvault fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -261,7 +257,7 @@ nodeDB.newData = {
     [11] = {
         ['x'] = 5,
         ['y'] = -55,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {1,},
@@ -269,7 +265,7 @@ nodeDB.newData = {
             ['titleText'] = "shadow lab key in sethekk halls",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -286,7 +282,7 @@ nodeDB.newData = {
     [12] = {
         ['x'] = -66,
         ['y'] = -87,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {9,11,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {9,},
@@ -294,7 +290,7 @@ nodeDB.newData = {
             ['titleText'] = "shadow lab fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -311,7 +307,7 @@ nodeDB.newData = {
     [13] = {
         ['x'] = -58,
         ['y'] = -261,
-        ['type'] = 1,
+        ['type'] = 5,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {},
@@ -319,7 +315,7 @@ nodeDB.newData = {
             ['titleText'] = "CoT entry quest",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -336,7 +332,7 @@ nodeDB.newData = {
     [14] = {
         ['x'] = -104,
         ['y'] = -211,
-        ['type'] = 5,
+        ['type'] = 3,
         ['preReq'] = {13,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {9,},
@@ -344,7 +340,7 @@ nodeDB.newData = {
             ['titleText'] = "normal Escape from durnholde",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -369,7 +365,7 @@ nodeDB.newData = {
             ['titleText'] = "Karazan key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -394,7 +390,7 @@ nodeDB.newData = {
             ['titleText'] = "gruul fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -419,7 +415,7 @@ nodeDB.newData = {
             ['titleText'] = "nightbane fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -436,7 +432,7 @@ nodeDB.newData = {
     [18] = {
         ['x'] = -420,
         ['y'] = 124,
-        ['type'] = 1,
+        ['type'] = 5,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {1,},
@@ -444,7 +440,7 @@ nodeDB.newData = {
             ['titleText'] = "The Cipher of Damnation questline",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -469,7 +465,7 @@ nodeDB.newData = {
             ['titleText'] = "Revered Honor Hold",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -494,7 +490,7 @@ nodeDB.newData = {
             ['titleText'] = "Shattered halls normal mode key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -513,13 +509,13 @@ nodeDB.newData = {
         ['y'] = 210,
         ['type'] = 1,
         ['preReq'] = {20,19,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_13",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "HC shattered halls key",
-            ['flavorText'] = '',
+            ['titleText'] = "Gain access to Heroic Hellfire Citadel",
+            ['flavorText'] = '"Unlocks Hellfire Ramparts, The Blood Furnace and The Shattered Halls"',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -544,7 +540,7 @@ nodeDB.newData = {
             ['titleText'] = "Shattered halls HC",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -569,7 +565,7 @@ nodeDB.newData = {
             ['titleText'] = "Revered Cenarion Expedition",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -588,13 +584,13 @@ nodeDB.newData = {
         ['y'] = 337,
         ['type'] = 1,
         ['preReq'] = {23,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_13",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "Slave Pens key",
+            ['titleText'] = "Gain access to Heroic Coilfang Reservoir",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -613,13 +609,13 @@ nodeDB.newData = {
         ['y'] = 337,
         ['type'] = 1,
         ['preReq'] = {23,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_13",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "Steam Vaults key",
+            ['titleText'] = "Gain access to Heroic Coilfang Reservoir",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -641,10 +637,10 @@ nodeDB.newData = {
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {22,},
         ['tooltip'] = {
-            ['titleText'] = "HC steam vaults",
+            ['titleText'] = "HC Steam Vaults",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -669,7 +665,7 @@ nodeDB.newData = {
             ['titleText'] = "Revered Lower city",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -694,7 +690,7 @@ nodeDB.newData = {
             ['titleText'] = "HC arcatraz",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -713,13 +709,13 @@ nodeDB.newData = {
         ['y'] = 124,
         ['type'] = 1,
         ['preReq'] = {27,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_11",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "HC shadowlabs key",
+            ['titleText'] = "Gain access to Heroic Auchindoun",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -741,10 +737,10 @@ nodeDB.newData = {
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {28,},
         ['tooltip'] = {
-            ['titleText'] = "Shadow Labs HC",
+            ['titleText'] = "HC Shadow labs",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -769,7 +765,7 @@ nodeDB.newData = {
             ['titleText'] = "Magtheridon fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -794,7 +790,7 @@ nodeDB.newData = {
             ['titleText'] = "tempest keep key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -819,7 +815,7 @@ nodeDB.newData = {
             ['titleText'] = "ssc key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -844,7 +840,7 @@ nodeDB.newData = {
             ['titleText'] = "ssc fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -869,7 +865,7 @@ nodeDB.newData = {
             ['titleText'] = "tempest key fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -894,7 +890,7 @@ nodeDB.newData = {
             ['titleText'] = "Friendly Scale of the sands",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -910,7 +906,7 @@ nodeDB.newData = {
     },
     [37] = {
         ['x'] = 344,
-        ['y'] = 179,
+        ['y'] = 180,
         ['type'] = 2,
         ['preReq'] = {36,35,34,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
@@ -919,7 +915,7 @@ nodeDB.newData = {
             ['titleText'] = "Mount Hyjal Key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -936,7 +932,7 @@ nodeDB.newData = {
     [38] = {
         ['x'] = 73,
         ['y'] = 281,
-        ['type'] = 1,
+        ['type'] = 5,
         ['preReq'] = {1,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {1,},
@@ -944,7 +940,7 @@ nodeDB.newData = {
             ['titleText'] = "BT intro quest",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -969,7 +965,7 @@ nodeDB.newData = {
             ['titleText'] = "revisit Arcatraz",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -994,7 +990,7 @@ nodeDB.newData = {
             ['titleText'] = "SSC quest",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1019,7 +1015,7 @@ nodeDB.newData = {
             ['titleText'] = "Tempest keep fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1044,7 +1040,7 @@ nodeDB.newData = {
             ['titleText'] = "Hyjal Fragment",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1069,7 +1065,7 @@ nodeDB.newData = {
             ['titleText'] = "Black temple key",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1094,7 +1090,7 @@ nodeDB.newData = {
             ['titleText'] = "Zul'Aman",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1119,7 +1115,7 @@ nodeDB.newData = {
             ['titleText'] = "Sunwell",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1144,7 +1140,7 @@ nodeDB.newData = {
             ['titleText'] = "Gruuls' lair",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1169,7 +1165,7 @@ nodeDB.newData = {
             ['titleText'] = "kazzak",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1194,7 +1190,7 @@ nodeDB.newData = {
             ['titleText'] = "Defeat Magtheridon",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 8,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1219,7 +1215,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Ogri'la",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1244,7 +1240,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted The Consortium",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1269,7 +1265,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Lower City",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1294,7 +1290,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Netherwing",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1319,7 +1315,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Al'dor",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1344,7 +1340,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Sporeggar",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1369,7 +1365,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Kurenei",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1394,7 +1390,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Scale of the sands",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1419,7 +1415,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Honor Hold",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1444,7 +1440,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Cenarion Expedition",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1469,7 +1465,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted The Violet Eye",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1494,7 +1490,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Sha'tar",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1519,7 +1515,7 @@ nodeDB.newData = {
             ['titleText'] = "Revered Keepers of Time",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1538,13 +1534,13 @@ nodeDB.newData = {
         ['y'] = 267,
         ['type'] = 1,
         ['preReq'] = {61,},
-        ['icon'] = "interface/icons/inv_misc_rune_01",
+        ['icon'] = "interface/icons/inv_misc_key_04",
         ['lineExcept'] = {},
         ['tooltip'] = {
-            ['titleText'] = "CoT HC keys",
+            ['titleText'] = "Gain access to Heroic Caverns of Time Dungeons",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1569,7 +1565,7 @@ nodeDB.newData = {
             ['titleText'] = "Exalted Keepers of Time",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1594,7 +1590,7 @@ nodeDB.newData = {
             ['titleText'] = "Slave Pens HC",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
@@ -1611,7 +1607,7 @@ nodeDB.newData = {
     [65] = {
         ['x'] = -349,
         ['y'] = -151,
-        ['type'] = 1,
+        ['type'] = 5,
         ['preReq'] = {2,},
         ['icon'] = "interface/icons/inv_misc_rune_01",
         ['lineExcept'] = {},
@@ -1619,7 +1615,7 @@ nodeDB.newData = {
             ['titleText'] = "Arcatraz intro Quest",
             ['flavorText'] = '',
             ['objectives'] = {
-                ['level'] = 1,
+                ['level'] = 0,
                 ['spell'] = {
                 },
                 ['item'] = {
