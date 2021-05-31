@@ -33,6 +33,7 @@ local nodesomething = {
 -------------------------------------
 local UI = CreateFrame("Frame", "Adventure_UI", UIParent, "BasicFrameTemplate")
 UI:SetSize(1100, 900) --x, y
+UI:SetFrameStrata("BORDER")
 UI:SetPoint("CENTER", UIParent, "CENTER")
 UI.nodes = {}
 UI.clusters = {}
